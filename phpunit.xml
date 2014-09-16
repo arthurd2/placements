@@ -1,9 +1,10 @@
 <phpunit  colors="true">
-	<testsuites>
-		<testsuite name="Application Test Suite">
-			<directory>./tests/*Tests.php</directory>
-		</testsuite>
-	</testsuites>
+  <testsuites>
+    <testsuite name="Test 01">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+
 	<logging>
 		<log type="coverage-clover" target="coverage.xml" />
         	<log type="junit" target="junit.xml" />
