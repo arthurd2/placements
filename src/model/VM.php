@@ -25,8 +25,8 @@ class VM
         $this->dimensions = $newDim;
     }
     
-    public function getDimension($dimension_name) {
-        return isset($this->dimensions[$dimension_name]) ? $this->dimensions[$dimension_name] : 0;
+    public function getDimension($dimensionName) {
+        return isset($this->dimensions[$dimensionName]) ? $this->dimensions[$dimensionName] : 0;
     }
     
     public function setDimension($name, $value) {

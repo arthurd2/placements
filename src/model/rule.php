@@ -31,7 +31,7 @@ class Rule
         return new Rule($mergedRules);
     }
     
-    static private function mergeRule(&$host, &$vm, &$rules) {
+    private static function mergeRule(&$host, &$vm, &$rules) {
         foreach ($rules as $rule) {
             if (!$rule->isPermited($host->getName(), $vm->getName())) {
                 return false;
