@@ -4,14 +4,20 @@ class Host
     private $freeDimensions;
     private $dimensions;
     private $VMs = array();
+    private $name;
     
-    function __construct($dimensions) {
+    function __construct($name, array $dimensions) {
+        $this->name = $name;
         $this->dimensions = $dimensions;
         $this->freeDimensions = $dimensions;
     }
-
+    
     public function getVMs() {
         return $this->VMs;
+    }
+    
+    public function getName() {
+        return $this->name;
     }
     
     public function getFreeDimensions() {
@@ -21,7 +27,7 @@ class Host
     public function getDimensions() {
         return $this->dimensions;
     }
-
+    
     public function fitVM(VM $VM) {
         foreach ($this->freeDimensions as $dimension => $freeSpace) {
             if ($freeSpace < $VM->getDimension($dimension)) {

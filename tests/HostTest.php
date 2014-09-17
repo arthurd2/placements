@@ -15,7 +15,7 @@ class PacoteTest extends PHPUnit_Framework_TestCase
 		$this->vm_equal = new VM('equal',$this->dimensions);
     	$this->vm_small = new VM('small',$this->small_dimensions);
     	$this->vm_big 	= new VM('big',$this->big_dimensions);
-		$this->host = new Host($this->dimensions);
+		$this->host = new Host(HOST_NAME ,$this->dimensions);
 	}
 
 
