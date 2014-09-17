@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<project name="idufsc" default="build">
+<project name="VMPlacement" default="build">
  <target name="build" depends="prepare,lint,phpunit"/>
 
  <target name="clean" description="Cleanup build artifacts">
