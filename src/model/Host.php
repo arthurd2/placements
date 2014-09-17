@@ -1,33 +1,32 @@
 <?php
-class Host
-{
+class Host {
     private $freeDimensions;
     private $dimensions;
-    private $VMs = array();
+    private $vms = array();
     private $name;
-    
+
     function __construct($name, array $dimensions) {
         $this->name = $name;
         $this->dimensions = $dimensions;
         $this->freeDimensions = $dimensions;
     }
-    
+
     public function getVMs() {
-        return $this->VMs;
+        return $this->vms;
     }
-    
+
     public function getName() {
         return $this->name;
     }
-    
+
     public function getFreeDimensions() {
         return $this->freeDimensions;
     }
-    
+
     public function getDimensions() {
         return $this->dimensions;
     }
-    
+
     public function fitVM(VM $VM) {
         foreach ($this->freeDimensions as $dimension => $freeSpace) {
             if ($freeSpace < $VM->getDimension($dimension)) {
@@ -36,12 +35,12 @@ class Host
         }
         return true;
     }
-    
+
     public function storeVM($VM) {
         if ($this->fitVM($VM)) {
             try {
                 $this->substractVMDimesions($VM);
-                $this->VMs[] = $VM;
+                $this->vms[] = $VM;
                 return true;
             }
             catch(Exception $e) {
@@ -50,7 +49,7 @@ class Host
         }
         return false;
     }
-    
+
     private function substractVMDimesions($VM) {
         foreach ($this->freeDimensions as $dimension => $freeSpace) {
             $substract = $VM->getDimension($dimension);
