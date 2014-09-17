@@ -27,20 +27,20 @@ class Host {
         return $this->dimensions;
     }
 
-    public function fitVM(VM $VM) {
+    public function fitVM(VM $vm) {
         foreach ($this->freeDimensions as $dimension => $freeSpace) {
-            if ($freeSpace < $VM->getDimension($dimension)) {
+            if ($freeSpace < $vm->getDimension($dimension)) {
                 return false;
             }
         }
         return true;
     }
 
-    public function storeVM($VM) {
-        if ($this->fitVM($VM)) {
+    public function storeVM($vm) {
+        if ($this->fitVM($vm)) {
             try {
-                $this->substractVMDimesions($VM);
-                $this->vms[] = $VM;
+                $this->substractVMDimesions($vm);
+                $this->vms[] = $vm;
                 return true;
             }
             catch(Exception $e) {
@@ -50,9 +50,9 @@ class Host {
         return false;
     }
 
-    private function substractVMDimesions($VM) {
+    private function substractVMDimesions($vm) {
         foreach ($this->freeDimensions as $dimension => $freeSpace) {
-            $substract = $VM->getDimension($dimension);
+            $substract = $vm->getDimension($dimension);
             if ($freeSpace < $substract) {
                 throw new Exception("VMTooBigToStore");
             } else {

@@ -8,14 +8,16 @@ class Rule {
 
     function setMatrix($matrix) {
 
-        if (!is_null($this->matrix)) return false;
+        if (!is_null($this->matrix)) 
+        	return false;
         $this->matrix = $matrix;
         return true;
     }
 
     function isPermited($host, $vm) {
 
-        if (is_null($this->matrix)) throw new Exception("TestingWithoutMatrix", 1);
+        if (is_null($this->matrix))
+        	throw new Exception("TestingWithoutMatrix", 1);
         
         return isset($this->matrix[$host][$vm]) ? $this->matrix[$host][$vm] : false;
     }
