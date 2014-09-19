@@ -1,40 +1,53 @@
 <?php
 class VM
 {
-    public $name;
-    public $dimensions;
+    private $name;
+    private $dimensions;
+    private $possibleHost;
     
     function __construct($name, $dimensions) {
         $this->name = $name;
         $this->dimensions = $dimensions;
     }
     
-    public function getName() {
+    function getName() {
         return $this->name;
     }
     
-    public function setName($newName) {
+    function setName($newName) {
         $this->name = $newName;
     }
     
-    public function getDimensions() {
+    function getDimensions() {
         return $this->dimensions;
     }
     
-    public function setDimensions($newDim) {
+    function setDimensions($newDim) {
         $this->dimensions = $newDim;
     }
     
-    public function getDimension($dimensionName) {
+    function getDimension($dimensionName) {
         return isset($this->dimensions[$dimensionName]) ? $this->dimensions[$dimensionName] : 0;
     }
     
-    public function setDimension($name, $value) {
+    function setDimension($name, $value) {
         if (is_float($value) || is_int($value)) {
             $this->dimensions[$name] = $value;
         } else {
             throw new Exception("InvalidDimension");
         }
     }
+    function setPossibleHost(&$host) {
+        $this->possibleHost[$host->getName() ] = $host;
+    }
+
+    function getQtdHosts(){
+        return count($this->possibleHost);
+    }
+
+    function getPossibleHosts(){
+        return $this->possibleHost;
+    }
+
 }
 

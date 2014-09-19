@@ -52,4 +52,13 @@ class Host
             $this->freeDimensions[$dimension]-= $substract;
         }
     }
+    
+    /**
+     * setPossibleVM
+     * Add a VM in the list of possible vms to host
+     * @param VM $vm [description]
+     */
+    function setPossibleVM(&$vm) {
+        $this->possibleVMs[$vm->getName() ] = $vm;
+    }
 }

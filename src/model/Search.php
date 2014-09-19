@@ -5,9 +5,13 @@ class Search
     function getPossibilities(&$hosts, &$vms, &$rules) {
         $mergedRule = Rule::mergeRules($hosts, $vms, $rules);
         $status = new Status($hosts, $vms, $mergedRule);
-        $places = $status->getSpecialVMs();
-        foreach ($places as $place) {
-            $this->recursion($status, $place->host, $place->vm);
+        $vms = $status->getSpecialVMs();
+        foreach ($vms as $vm) {
+        	$hosts = $vm->getPossibleHosts();
+        	foreach ($hosts as $host) {
+        		$this->recursion($status, $host, $vm);
+        	}
+            
         }
     }
     
