@@ -9,7 +9,7 @@ class Status extends rule
      * @param [type] $vms
      * @param [type] $mergedRule
      */
-    function Status($hosts, $vms, $rule) {
+    function __construct($hosts, $vms, $rule) {
         $this->matrix = $rule->matrix;
         foreach ($hosts as $host) {
             $this->hosts[$host->getName() ] = $host;

@@ -7,11 +7,10 @@ class Search
         $status = new Status($hosts, $vms, $mergedRule);
         $vms = $status->getSpecialVMs();
         foreach ($vms as $vm) {
-        	$hosts = $vm->getPossibleHosts();
-        	foreach ($hosts as $host) {
-        		$this->recursion($status, $host, $vm);
-        	}
-            
+            $hosts = $vm->getPossibleHosts();
+            foreach ($hosts as $host) {
+                $this->recursion($status, $host, $vm);
+            }
         }
     }
     
@@ -23,11 +22,14 @@ class Search
      * @return null
      */
     private function recursion(&$status, &$host, &$vm) {
-        $new_status = $status->getStatusAfterStore($host, $vm);
-        $places = $new_status->getSpecialVMs();
-        if (empty($place)) $this->storeStatus($new_status);
-        foreach ($places as $place) {
-            $this->recursion($status, $place->host, $place->vm);
+        $newStatus = $status->getStatusAfterStore($host, $vm);
+        $vms = $newStatus->getSpecialVMs();
+        if (empty($place)) $this->storeStatus($newStatus);
+        foreach ($vms as $vm) {
+            $hosts = $vm->getPossibleHosts();
+            foreach ($hosts as $host) {
+                $this->recursion($status, $host, $vm);
+            }
         }
     }
     
