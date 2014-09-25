@@ -42,6 +42,10 @@ class PacoteTest extends PHPUnit_Framework_TestCase
     	$this->assertTrue($this->host->storeVM($this->vm_small));
 	}
 
+    public function testGetId(){
+        $this->assertEquals(spl_object_hash($this->host), $this->host->getId());
+    }
+
     public function testStoreVMEqual(){	
     	$this->assertTrue($this->host->storeVM($this->vm_equal));
 	}
@@ -60,5 +64,4 @@ class PacoteTest extends PHPUnit_Framework_TestCase
 	}
 
     //TODO Alocar uma VM ja alocada?
-    
 }

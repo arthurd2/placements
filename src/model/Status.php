@@ -43,7 +43,6 @@ class Status extends rule
     }
     
     /**
-     testar bem
      * getStatusAfterStore
      * Considerando que a VM passada será armazenada no Host passado, deve retornar um novo status atualizado.
      * Para cada VM que poderia ser alocado no host, ele verifica se ainda serve no mesmo.
@@ -52,8 +51,6 @@ class Status extends rule
      * @return Array[]
      */
     function getStatusAfterStore(&$host, &$vm) {
-    	//$this->vms[$vm->getId()]->setHost($this->hosts[$host->getId()]);
-    	//$this->host[$host->getId()]->addVM($this->vms[$vm->getId()]);
     	$vm->setHost($host);
     	$vm->removePossibleHost($host);
     	$host->storeVM($vm);
@@ -62,14 +59,14 @@ class Status extends rule
     	$this->placedHosts[$host->getId()] = $host ;
 		unset($this->vms[$vm->getId()]);
     	unset($this->hosts[$host->getId()]);
-    	return clone($this); //isso funciona mesmo?
+    	return clone($this); 
     }
     
     /**
-     * TODO
      * Retorna o mapeamento Hosts x VMs
      * @return Hosts[]
      */
     function getPlacements() {
+        return $this->placedHosts;
     }
 }
