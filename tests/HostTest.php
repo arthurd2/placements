@@ -52,11 +52,13 @@ class PacoteTest extends PHPUnit_Framework_TestCase
 
     public function testStore3VM(){	
     	$this->assertTrue($this->host->storeVM($this->vm_small),'VM Small 1 Added');
-		$this->assertTrue($this->host->storeVM($this->vm_small),'VM Small 2 Added');
-		$this->assertFalse($this->host->storeVM($this->vm_small),'VM Small 3 Not Added');
+		$this->assertTrue($this->host->storeVM(clone($this->vm_small)),'VM Small 2 Added');
+		$this->assertFalse($this->host->storeVM(clone($this->vm_small)),'VM Small 3 Not Added');
 		$expected = var_export(array($this->vm_small,$this->vm_small),true);
-		$returned = var_export($this->host->getVMs(),true);
+		$returned = var_export(array_values($this->host->getVMs()),true);
 		$this->assertEquals($expected,$returned,'Returned VM ok!');
 	}
+
+    //TODO Alocar uma VM ja alocada?
     
 }

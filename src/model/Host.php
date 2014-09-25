@@ -19,7 +19,10 @@ class Host
     public function getName() {
         return $this->name;
     }
-    
+    public function getId() {
+        return spl_object_hash($this);
+    }
+
     public function getFreeDimensions() {
         return $this->freeDimensions;
     }
@@ -40,8 +43,8 @@ class Host
     public function storeVM(&$vm) {
         if ($this->fitVM($vm)) {
             $this->substractVMDimesions($vm);
-            unset($this->possibleVMs[$vm->getName()]);
-            $this->vms[$vm->getName()] = $vm;
+            unset($this->possibleVMs[$vm->getId()]);
+            $this->vms[$vm->getId()] = $vm;
             return true;
         }
         return false;
@@ -60,7 +63,7 @@ class Host
      * @param VM $vm [description]
      */
     function setPossibleVM(&$vm) {
-        $this->possibleVMs[$vm->getName()] = $vm;
+        $this->possibleVMs[$vm->getId()] = $vm;
     }
 
     /**
@@ -72,7 +75,7 @@ class Host
         foreach ($this->possibleVMs as $vm) {
             if (! $this->fitVM($vm))
                 $vm->removePossibleHost($this);
-                unset($this->possibleVMs[$vm->getName()]);
+                unset($this->possibleVMs[$vm->getId()]);
         }
     }
 }

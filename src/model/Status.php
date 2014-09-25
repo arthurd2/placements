@@ -12,10 +12,10 @@ class Status extends rule
     function __construct($hosts, $vms, $rule) {
         $this->matrix = $rule->matrix;
         foreach ($hosts as $host) {
-            $this->hosts[$host->getName() ] = $host;
+            $this->hosts[$host->getId() ] = $host;
             foreach ($vms as $vm) {
-                $this->vms[$vm->getName() ] = $vm;
-                if ($rule->isPermited($host->getName(), $vm->getName())) {
+                $this->vms[$vm->getId() ] = $vm;
+                if ($rule->isPermited($host->getId(), $vm->getId())) {
                     $vm->setPossibleHost($host);
                     $host->setPossibleVM($vm);
                 }
@@ -52,16 +52,16 @@ class Status extends rule
      * @return Array[]
      */
     function getStatusAfterStore(&$host, &$vm) {
-    	//$this->vms[$vm->getName()]->setHost($this->hosts[$host->getName()]);
-    	//$this->host[$host->getName()]->addVM($this->vms[$vm->getName()]);
+    	//$this->vms[$vm->getId()]->setHost($this->hosts[$host->getId()]);
+    	//$this->host[$host->getId()]->addVM($this->vms[$vm->getId()]);
     	$vm->setHost($host);
     	$vm->removePossibleHost($host);
     	$host->storeVM($vm);
     	$host->updatePossibleVMs();
-    	$this->placedVMs[$vm->getName()] = $vm;
-    	$this->placedHosts[$host->getName()] = $host ;
-		unset($this->vms[$vm->getName()]);
-    	unset($this->hosts[$host->getName()]);
+    	$this->placedVMs[$vm->getId()] = $vm;
+    	$this->placedHosts[$host->getId()] = $host ;
+		unset($this->vms[$vm->getId()]);
+    	unset($this->hosts[$host->getId()]);
     	return clone($this); //isso funciona mesmo?
     }
     

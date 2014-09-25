@@ -15,6 +15,10 @@ class VM
         return $this->name;
     }
     
+    public function getId() {
+        return spl_object_hash($this);
+    }
+
     function setName($newName) {
         $this->name = $newName;
     }
@@ -39,7 +43,7 @@ class VM
         }
     }
     function setPossibleHost(&$host) {
-        $this->possibleHost[$host->getName() ] = $host;
+        $this->possibleHost[$host->getId() ] = $host;
     }
 
     function getQtdHosts(){
@@ -55,7 +59,7 @@ class VM
      * @param  Host $host 
      */
     function removePossibleHost(&$host){
-        unset($this->possibleHost[$host->getName()]);
+        unset($this->possibleHost[$host->getId()]);
     }
     
     function setHost(&$host){
