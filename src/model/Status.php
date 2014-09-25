@@ -25,7 +25,7 @@ class Status extends rule
     
     /**
      * getSpecialVMs
-     * 	Return the VMs with least possibilities
+     *  Return the VMs with least possibilities
      * @return VM[]
      */
     private function getSpecialVMs() {
@@ -51,15 +51,15 @@ class Status extends rule
      * @return Array[]
      */
     function getStatusAfterStore(&$host, &$vm) {
-    	$vm->setHost($host);
-    	$vm->removePossibleHost($host);
-    	$host->storeVM($vm);
-    	$host->updatePossibleVMs();
-    	$this->placedVMs[$vm->getId()] = $vm;
-    	$this->placedHosts[$host->getId()] = $host ;
-		unset($this->vms[$vm->getId()]);
-    	unset($this->hosts[$host->getId()]);
-    	return clone($this); 
+        $vm->setHost($host);
+        $vm->removePossibleHost($host);
+        $host->storeVM($vm);
+        $host->updatePossibleVMs();
+        $this->placedVMs[ $vm->getId() ] = $vm;
+        $this->placedHosts[ $host->getId() ] = $host;
+        unset($this->vms[ $vm->getId() ]);
+        unset($this->hosts[ $host->getId() ]);
+        return clone ($this);
     }
     
     /**
