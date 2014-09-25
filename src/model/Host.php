@@ -28,7 +28,7 @@ class Host
         return $this->dimensions;
     }
     
-    public function fitVM(VM $vm) {
+    public function fitVM(VM &$vm) {
         foreach ($this->freeDimensions as $dimension => $freeSpace) {
             if ($freeSpace < $vm->getDimension($dimension)) {
                 return false;
@@ -37,16 +37,17 @@ class Host
         return true;
     }
     
-    public function storeVM($vm) {
+    public function storeVM(&$vm) {
         if ($this->fitVM($vm)) {
             $this->substractVMDimesions($vm);
-            $this->vms[] = $vm;
+            unset($this->possibleVMs[$vm->getName()]);
+            $this->vms[$vm->getName()] = $vm;
             return true;
         }
         return false;
     }
     
-    private function substractVMDimesions($vm) {
+    private function substractVMDimesions(&$vm) {
         foreach ($this->freeDimensions as $dimension => $freeSpace) {
             $substract = $vm->getDimension($dimension);
             $this->freeDimensions[$dimension]-= $substract;
@@ -59,6 +60,19 @@ class Host
      * @param VM $vm [description]
      */
     function setPossibleVM(&$vm) {
-        $this->possibleVMs[$vm->getName() ] = $vm;
+        $this->possibleVMs[$vm->getName()] = $vm;
+    }
+
+    /**
+     * addVM
+     * Adiciona VM na lista de hospedadas nest host
+     * @param VM $vm 
+     */ 
+    function updatePossibleVMs(&$vm){
+        foreach ($this->possibleVMs as $vm) {
+            if (! $this->fitVM($vm))
+                $vm->removePossibleHost($this);
+                unset($this->possibleVMs[$vm->getName()]);
+        }
     }
 }

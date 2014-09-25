@@ -4,6 +4,7 @@ class VM
     private $name;
     private $dimensions;
     private $possibleHost;
+    private $host;
     
     function __construct($name, $dimensions) {
         $this->name = $name;
@@ -47,6 +48,18 @@ class VM
 
     function getPossibleHosts(){
         return $this->possibleHost;
+    }
+    /**
+     * removePossibleHost 
+     * remove o host enviado como um dos possiveis hosts a ser alocado em
+     * @param  Host $host 
+     */
+    function removePossibleHost(&$host){
+        unset($this->possibleHost[$host->getName()]);
+    }
+    
+    function setHost(&$host){
+        $this->host = $host;
     }
 
 }
