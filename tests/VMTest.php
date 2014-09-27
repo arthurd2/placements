@@ -99,6 +99,14 @@ class VMTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($host1,$this->VM->getHost());
         $this->assertEquals($host1->getId(),$this->VM->getHost()->getId());
     }  
+    public function testDestroyHost() {
+        $host1 = new Host('1',array('RAM' => 512));
 
+        $this->VM->setHost($host1);
+
+        unset($host1);
+        $this->assertNull($this->VM->getHost());
+        
+    }  
 
 }
