@@ -6,15 +6,15 @@ require_once "tests/constants.php";
 class PacoteTest extends PHPUnit_Framework_TestCase
 {
     private $host;
-    private $dimensions       = array(D_RAM => D_RAM_V2, D_PROC => D_PROC_V2);
-    private $small_dimensions = array(D_RAM => D_RAM_V , D_PROC => D_PROC_V );
-    private $big_dimensions   = array(D_RAM => D_RAM_V3, D_PROC => D_PROC_V2);
+    private $dimensions = array(D_RAM => D_RAM_V2, D_PROC => D_PROC_V2);
+    private $small_dimensions = array(D_RAM => D_RAM_V, D_PROC => D_PROC_V);
+    private $big_dimensions = array(D_RAM => D_RAM_V3, D_PROC => D_PROC_V2);
     
     function setUp() {
         $this->vm_equal = new VM('equal', $this->dimensions);
         $this->vm_small = new VM('small', $this->small_dimensions);
-        $this->vm_big   = new VM('big'  , $this->big_dimensions);
-        $this->host     = new Host(HOST_NAME, $this->dimensions);
+        $this->vm_big = new VM('big', $this->big_dimensions);
+        $this->host = new Host(HOST_NAME, $this->dimensions);
     }
     
     public function testGetSetDimensions() {
@@ -61,24 +61,22 @@ class PacoteTest extends PHPUnit_Framework_TestCase
     }
     
     public function testPossibleVMs() {
-        $this->assertEquals(array(),$this->host->getPossibleVMs());
+        $this->assertEquals(array(), $this->host->getPossibleVMs());
         
         $this->host->setPossibleVM($this->vm_small);
         $this->host->setPossibleVM($this->vm_equal);
         $this->host->setPossibleVM($this->vm_big);
-        $this->assertEquals(3,count($this->host->getPossibleVMs()));
-
+        $this->assertEquals(3, count($this->host->getPossibleVMs()));
+        
         $this->host->updatePossibleVMs();
-        $this->assertEquals(2,count($this->host->getPossibleVMs()));
-
+        $this->assertEquals(2, count($this->host->getPossibleVMs()));
+        
         $this->host->storeVM($this->vm_small);
         $this->host->updatePossibleVMs();
-        $this->assertEquals(0,count($this->host->getPossibleVMs()));
-        
-
+        $this->assertEquals(0, count($this->host->getPossibleVMs()));
     }
     
-        public function testStoreVMsTwice() {
+    public function testStoreVMsTwice() {
         $this->host->storeVM($this->vm_small);
         $this->host->storeVM($this->vm_small);
         $this->assertEquals($this->small_dimensions, $this->host->getFreeDimensions());
