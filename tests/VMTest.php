@@ -2,6 +2,7 @@
 
 //require_once "./tests/constants.php";
 require_once "./src/model/VM.php";
+require_once "./src/model/Host.php";
 require_once "tests/constants.php";
 
 
@@ -52,4 +53,52 @@ class VMTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($value, $this->VM->getDimension(D_RAM));
         }
     }
+
+    public function testPossibleHosts() {
+        //Testa getQtdHosts
+        $this->assertEquals(0, $this->VM->getQtdHosts());
+
+        //Testa getPossibleHosts
+        $this->assertEquals(array(), $this->VM->getPossibleHosts());
+
+        $host1 = new Host('1',array('RAM' => 512));
+        $host2 = new Host('2',array('RAM' => 512));
+        $hosts[$host1->getId()] = $host1; 
+        $hosts[$host2->getId()] = $host2; 
+
+        //Adiciona host
+        $this->VM->setPossibleHost($host1);
+        //Adiciona um host ja existente
+        $this->VM->setPossibleHost($host1);
+        $this->assertEquals(1, $this->VM->getQtdHosts());
+
+        $this->VM->setPossibleHost($host2);
+        $this->assertEquals(2, $this->VM->getQtdHosts());
+
+        $this->assertEquals(2, $this->VM->getQtdHosts());
+
+        //Testa getPossibleHosts
+        $this->assertEquals($hosts, $this->VM->getPossibleHosts());
+
+        //Remove  
+        $this->VM->removePossibleHost($host2);        
+        $this->assertEquals(1, $this->VM->getQtdHosts());
+
+        //Remove inexistente
+        $this->VM->removePossibleHost($host2);        
+        $this->assertEquals(1, $this->VM->getQtdHosts());
+
+    }
+
+    public function testGetSetHosts() {
+        $host1 = new Host('1',array('RAM' => 512));
+
+        $this->assertNull($this->VM->getHost());
+
+        $this->VM->setHost($host1);
+        $this->assertEquals($host1,$this->VM->getHost());
+        $this->assertEquals($host1->getId(),$this->VM->getHost()->getId());
+    }  
+
+
 }

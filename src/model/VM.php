@@ -3,7 +3,7 @@ class VM
 {
     private $name;
     private $dimensions;
-    private $possibleHost;
+    private $possibleHost = array();
     private $host;
     
     function __construct($name, $dimensions) {
@@ -64,6 +64,10 @@ class VM
     
     function setHost(&$host){
         $this->host = $host;
+    }
+
+    function getHost(){
+        return $this->host ;
     }
 
 }
