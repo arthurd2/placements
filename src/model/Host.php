@@ -42,6 +42,8 @@ class Host
     }
     
     public function storeVM(&$vm) {
+        if(isset($this->vms[$vm->getId() ])) return true;
+
         if ($this->fitVM($vm)) {
             $this->substractVMDimesions($vm);
             unset($this->possibleVMs[$vm->getId() ]);

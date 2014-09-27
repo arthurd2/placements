@@ -73,11 +73,14 @@ class PacoteTest extends PHPUnit_Framework_TestCase
 
         $this->host->storeVM($this->vm_small);
         $this->host->updatePossibleVMs();
-        $this->assertEquals(1,count($this->host->getPossibleVMs()));
+        $this->assertEquals(0,count($this->host->getPossibleVMs()));
         
 
     }
     
-    //TODO Alocar uma VM ja alocada?
-    
+        public function testStoreVMsTwice() {
+        $this->host->storeVM($this->vm_small);
+        $this->host->storeVM($this->vm_small);
+        $this->assertEquals($this->small_dimensions, $this->host->getFreeDimensions());
+    }
 }
