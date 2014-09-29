@@ -6,11 +6,13 @@ class Host
     private $vms = array();
     private $name;
     private $possibleVMs = array();
+    private $id;
     
     function __construct($name, array $dimensions) {
         $this->name = $name;
         $this->dimensions = $dimensions;
         $this->freeDimensions = $dimensions;
+        $this->id = spl_object_hash($this); 
     }
     
     public function getVMs() {
@@ -21,7 +23,7 @@ class Host
         return $this->name;
     }
     public function getId() {
-        return spl_object_hash($this);
+        return $this->id;
     }
     
     public function getFreeDimensions() {

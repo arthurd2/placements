@@ -1,9 +1,8 @@
 <?php
 
-//require_once "./tests/constants.php";
 require_once "./src/model/VM.php";
 require_once "./src/model/Host.php";
-require_once "tests/constants.php";
+require_once "./tests/constants.php";
 
 
 class VMTest extends PHPUnit_Framework_TestCase
@@ -100,14 +99,13 @@ class VMTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($host1->getId(),$this->VM->getHost()->getId());
     }
 
-    //TODO 
-    public function estDestroyHost() {
+    public function testReferences() {
         $host1 = new Host('1',array('RAM' => 512));
 
         $this->VM->setHost($host1);
 
-        unset($host1);
-        $this->assertNull($this->VM->getHost());
+        $host1->nome = 'teste';
+        $this->assertEquals( 'teste',$this->VM->getHost()->nome );
         
     }  
 

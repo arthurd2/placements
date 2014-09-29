@@ -1,14 +1,16 @@
 <?php
 class VM
 {
-    private $name;
+    public $name;
     private $dimensions;
     private $possibleHost = array();
     private $host;
+    private $id;
     
     function __construct($name, $dimensions) {
         $this->name = $name;
         $this->dimensions = $dimensions;
+        $this->id = spl_object_hash($this);
     }
     
     function getName() {
@@ -16,7 +18,7 @@ class VM
     }
     
     public function getId() {
-        return spl_object_hash($this);
+        return $this->id;
     }
 
     function setName($newName) {
@@ -66,7 +68,7 @@ class VM
         $this->host = $host;
     }
 
-    function getHost(){
+    function &getHost(){
         return $this->host ;
     }
 

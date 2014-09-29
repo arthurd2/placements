@@ -13,15 +13,24 @@ class RulesTests extends PHPUnit_Framework_TestCase
     private $big_dimensions = array(D_RAM => D_RAM_V3, D_PROC => D_PROC_V2);
     
     function __construct() {
+        $vm1 = new VM(VM_NAME, $this->dimensions);
+        $vm2 = new VM(VM_NAME2, $this->small_dimensions);
+        $vm3 = new VM(VM_NAME3, $this->small_dimensions);
+        $host1 = new Host(HOST_NAME, $this->dimensions);
+        $host2 = new Host(HOST_NAME2, $this->dimensions);
+        $host3 = new Host(HOST_NAME3, $this->dimensions);
+
+        $this->host3 = $host3;
+        $this->vm3 = $vm3;
+
+        $this->vms = array($vm1,$vm2);
+        $this->hosts = array($host1,$host2);
         
-        $this->vms[] = new VM(VM_NAME, $this->dimensions);
-        $this->vms[] = new VM(VM_NAME2, $this->small_dimensions);
-        $this->hosts[] = new Host(HOST_NAME, $this->dimensions);
-        $this->hosts[] = new Host(HOST_NAME2, $this->dimensions);
+        $this->matrix[$host1->getId()][$vm1->getId()] = true;
+        $this->matrix[$host1->getId()][$vm2->getId()] = false;
+        //$this->matrix[$host2->getId()][$vm1->getId()] = true; // Nao existe de proposito.
+        $this->matrix[$host2->getId()][$vm2->getId()] = true;
         
-        $this->matrix[HOST_NAME][VM_NAME] = true;
-        $this->matrix[HOST_NAME2][VM_NAME2] = true;
-        $this->matrix[HOST_NAME][VM_NAME2] = false;
         $this->rule = new Rule();
     }
     
@@ -37,19 +46,19 @@ class RulesTests extends PHPUnit_Framework_TestCase
     }
     
     function testVMPermitida() {
-        $this->assertTrue($this->rule->isPermited(HOST_NAME, VM_NAME));
+        $this->assertTrue($this->rule->isPermited($this->hosts[0], $this->vms[0]));
     }
     
     function testVMNaoPermitida() {
-        $this->assertFalse($this->rule->isPermited(HOST_NAME, VM_NAME2));
+        $this->assertFalse($this->rule->isPermited($this->hosts[0], $this->vms[1]));
     }
     
     function testVMInexistenteNaoPermitida() {
-        $this->assertFalse($this->rule->isPermited(HOST_NAME, 'vm3'));
+        $this->assertFalse($this->rule->isPermited($this->hosts[0], $this->vm3));
     }
     
     function testHostInexistenteNaoPermitida() {
-        $this->assertFalse($this->rule->isPermited('host3', VM_NAME2));
+        $this->assertFalse($this->rule->isPermited($this->host3, $this->vms[1]));
     }
     
     /**
@@ -58,15 +67,18 @@ class RulesTests extends PHPUnit_Framework_TestCase
      */
     function testIsPermitterWithoutMatrix() {
         $rule = new Rule();
-        $rule->isPermited('host3', VM_NAME2);
+        $rule->isPermited($this->host3, $this->vms[1]);
     }
     
     //Testar merge do mesmo tamanho
     function testMergedRulesOfTheSameSize() {
         $rules = array($this->rule, $this->rule);
         $matrix = $this->matrix;
-        $matrix[HOST_NAME2][VM_NAME] = false;
+        $matrix[$this->hosts[1]->getId()][$this->vms[0]->getId()] = false;
         $rule = new Rule($matrix);
-        $this->assertEquals($rule, Rule::mergeRules($this->hosts, $this->vms, $rules), 'Merge de regras iguais');
+
+        $merged = Rule::mergeRules($this->hosts, $this->vms, $rules);
+        
+        $this->assertEquals($rule, $merged , 'Merge de regras iguais');
     }
 }
