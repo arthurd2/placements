@@ -1,12 +1,13 @@
 <?php
 class Scenario
 {
-    static function  gera_scenario( $apr,  $nvm,  $npm) {
+    static function  geraScenario( $apr,  $nvm,  $npm) {
         
-        //Bloco que gera um array com a distribuição inicial de Placements igual a $apr - Ex. 0.75 e 100PM geram 75 placements possiveis
-        $num_placements = floor($npm * $apr);
-        $allow = array_fill(0, $num_placements, True);
-        $denied = array_fill($num_placements, $npm - $num_placements, False);
+        //Bloco que gera um array com a distribuição inicial de Placements 
+        //igual a $apr - Ex. 0.75 e 100PM geram 75 placements possiveis
+        $numPlacements = floor($npm * $apr);
+        $allow = array_fill(0, $numPlacements, true);
+        $denied = array_fill($numPlacements, $npm - $numPlacements, false);
         $places = array_merge($allow, $denied);
         
         $result = array();
@@ -22,7 +23,7 @@ class Scenario
         return $result;
     }
     
-    static function gera_scenarios($apr, $nvms, $npms) {
+    static function geraScenarios($apr, $nvms, $npms) {
         $retorno = array();
         foreach ($nvms as $nvm) {
             foreach ($npms as $npm) {
@@ -30,7 +31,7 @@ class Scenario
                 $retorno[$key]["apr"] = $apr;
                 $retorno[$key]["nvm"] = $nvm;
                 $retorno[$key]["npm"] = $npm;
-                $retorno[$key]["scenario"] = Scenario::gera_scenario($apr, $nvm, $npm);
+                $retorno[$key]["scenario"] = Scenario::geraScenario($apr, $nvm, $npm);
             }
         }
         return $retorno;

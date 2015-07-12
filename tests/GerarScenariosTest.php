@@ -9,7 +9,7 @@ class GerarScenariosTest extends PHPUnit_Framework_TestCase
         $npms = 10;
         $apr = 0.5;
 
-        $scenario = Scenario::gera_scenario($apr,$nvms,$npms);
+        $scenario = Scenario::geraScenario($apr,$nvms,$npms);
         $this->assertEquals($nvms,count($scenario),"Numero de VMs esta errado.");
 
         $total = 0;
