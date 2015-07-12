@@ -1,6 +1,13 @@
 <?php
 class Scenario
 {
+    public $apr;
+    public $nvms;
+    public $npms;
+    public $scenario;
+
+    private function __construct(){}
+
     static function  geraScenario( $apr,  $nvm,  $npm) {
         
         //Bloco que gera um array com a distribuição inicial de Placements 
@@ -27,11 +34,11 @@ class Scenario
         $retorno = array();
         foreach ($nvms as $nvm) {
             foreach ($npms as $npm) {
-                $key = "r-$apr,v-$nvm,p-$npm";
-                $retorno[$key]["apr"] = $apr;
-                $retorno[$key]["nvm"] = $nvm;
-                $retorno[$key]["npm"] = $npm;
-                $retorno[$key]["scenario"] = Scenario::geraScenario($apr, $nvm, $npm);
+                $scenario->apr = $apr;
+                $scenario->nvm = $nvm;
+                $scenario->npm = $npm;
+                $scenario->placements = Scenario::geraScenario($apr, $nvm, $npm);
+                $retorno["r-$apr,v-$nvm,p-$npm"] = $scenario;
             }
         }
         return $retorno;
