@@ -8,18 +8,31 @@
 	"buffers":
 	[
 		{
-			"file": "/home/arthur/Downloads/Dropbox/Doutorado/algoritmo/src/model/rule.class.php",
+			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/combinacoes.php",
 			"settings":
 			{
-				"buffer_size": 50,
+				"buffer_size": 3043,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"contents": "\n\nPlace - ON Demand\nlee2010topology,liang2010multi,chen2013aaga,mark2011evolutionary,moens2012feature,amossen2010multi\n\nOrganize - Static\nxu2010multi,yan2012affinity,sun2014multi,calyam2011utility,biran2012stable\n\nHybrid - Dynamic\nbeloglazov2010energy,wang2011adaptive,dong2013energy, feller2012snooze, abar2014automated, viswanathan2012cloudmap, le2011reducing, fang2013vmplanner, abdul2012toward,  urgaonkar2010dynamic\n\n\n\nBuongiorno , buon pomeriggio e buonasera, Luciano.\nMeu nome é Guilherme, mas todos me chamam de Arthur.\nTenho 30 anos, sou Manezinho da Ilha mas atualmente estou autoexilado em uma pequena cidade italiana chamada Lucca, finalizando minha tese.\n\nFiquei um tanto regozijado ao ouvir o programa sobre Va Pensiero, por dois motivos.\n\nPrimeiramente pois agora em junho inicia o Festival Italiano de Opera, e com que peça?\nNabucco, é claro.\nNão acredito que seja Coincidencia.\nObrigado por chamar nossa atenção aos trabalho de Verdi.\n\nEm segundo lugar,  pela narração das ações  hipócritas de Berlusconi nesta ocasião, ao cortar a verba da Cultura e comparecer publicamente neste evento.\nComo qualquer brasileiro, isto não me impressionou, pois ja vimos pior.\nPorém me recordou de uma frase do livro A Revolta de Atlas, de Ain Randy, onde um de seus personagens afirma:\n\"O preço da incoerência é a destruição\"\nSim, simples e certeiro. Vou repetir:\n\"O preço da incoerência é a destruição\"\nLegal né?\n\nBom, eu não sou nenhum articular politico.\nMas  participar de uma manifestação cultural como Nabucco após ter vetado os fundos, não me parece muito coerente....\n\nValeu Pessoal\n\n",
+			"settings":
+			{
+				"buffer_size": 1594,
 				"line_ending": "Unix"
 			}
 		}
 	],
 	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
 	"command_palette":
 	{
 		"height": 243.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -86,8 +99,14 @@
 		"side_bar_visible": false,
 		"status_bar_visible": false
 	},
+	"expanded_folders":
+	[
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src"
+	],
 	"file_history":
 	[
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/rule.class.php",
 		"/home/arthur/Downloads/tmp/teste/index.php",
 		"/home/arthur/.config/sublime-text-3/Packages/sdfsdfsfs",
 		"/home/arthur/.config/sublime-text-3/Packages/AdvancedNewFile/Default (Linux).sublime-keymap",
@@ -159,19 +178,19 @@
 			[
 				{
 					"buffer": 0,
-					"file": "/home/arthur/Downloads/Dropbox/Doutorado/algoritmo/src/model/rule.class.php",
+					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/combinacoes.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 50,
+						"buffer_size": 3043,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								47,
-								47
+								2773,
+								2773
 							]
 						],
 						"settings":
@@ -179,10 +198,39 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1683.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 1594,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								223,
+								223
+							]
+						],
+						"settings":
+						{
+							"auto_name": "",
+							"default_dir": "/home/arthur/Downloads/Seafile/Doutorado/Codigos",
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]
@@ -223,6 +271,7 @@
 	{
 		"height": 0.0
 	},
+	"pinned_build_system": "Packages/User/phpcli.sublime-build",
 	"project": "doutorado.sublime-project",
 	"replace":
 	{
@@ -232,6 +281,7 @@
 	"select_file":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 			[
@@ -244,6 +294,7 @@
 	"select_project":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
@@ -252,11 +303,13 @@
 	"select_symbol":
 	{
 		"height": 0.0,
+		"last_filter": "",
 		"selected_items":
 		[
 		],
 		"width": 0.0
 	},
+	"selected_group": 0,
 	"settings":
 	{
 	},

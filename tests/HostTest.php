@@ -81,4 +81,6 @@ class PacoteTest extends PHPUnit_Framework_TestCase
         $this->host->storeVM($this->vm_small);
         $this->assertEquals($this->small_dimensions, $this->host->getFreeDimensions());
     }
+
+    //TODO Testar se esta salvando as VM como referencia mesmo.
 }

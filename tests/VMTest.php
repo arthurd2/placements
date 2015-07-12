@@ -109,4 +109,6 @@ class VMTest extends PHPUnit_Framework_TestCase
         
     }  
 
+    //TODO testar para ver se esta salvando os hosts como referencia mesmo.
+
 }
