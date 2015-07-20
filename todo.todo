@@ -8,5 +8,10 @@
 +-- Criar testes
 +-- Criar função
 -- Arrumar os testes para descobrir pq esta retornando 0
+- Criar scenarios progressivos
+- imprimir estados
+-- Imprimir os valores calculados
+-- Imprimir em accordion
+-- Highlight a tabela
 - Criar cenarios pequenos para plotar
 - Alterar a Geracao de codigos para imprimir os numeros reais tambem

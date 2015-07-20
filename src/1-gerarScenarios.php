@@ -6,7 +6,7 @@ require_once "model/Scenario.php";
 $apr = 0.75;
 
 //Seta intervalos de VMs
-$nvms = array(4,5,6,7,8,9,10,11,12);
+$nvms = array(4,5,6,7,8,9);
 
 //Seta intervalos de PMs
 $npms = array(3);

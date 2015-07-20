@@ -52,4 +52,38 @@ class Scenario
         }
         return $retorno;
     }
+
+    static function getFilledArrayWithTrue($placements){
+        $resp = array();
+        foreach ($placements as $vm => $places) 
+            foreach ($places as $place) {
+                list($nvm,$npm) = explode(':', $place);
+                $resp[$nvm][$npm] = true;
+            }
+        return $resp;
+    }
+
+    static function toGoogleTableLines($scenario){
+        $places = Scenario::getFilledArrayWithTrue($scenario['placements']);
+        $vms = array_keys($scenario['rvm']);
+        $pms = array_keys($scenario['rpm']);
+        $resp = array();
+
+        foreach ($vms as $v) {
+            $line = array("'$v'");
+            foreach ($pms as $p) 
+                $line[] = isset($places[$v][$p])? 'true' : 'false';
+            $resp[] = sprintf('[%s]',implode(',', $line));
+        }
+        return "data.addRows([\n".implode(",\n", $resp)."\n]);";
+    }
+    static function toGoogleTableHeader($scenario){
+        $resp = "data.addColumn('string', 'Name');\n";
+        $fmt = "data.addColumn('boolean', '%s');\n";
+        $pms = array_keys($scenario['rpm']);
+        foreach ($pms as $value) {
+            $resp .= sprintf($fmt,$value);
+        }
+        return $resp;
+    }
 }
