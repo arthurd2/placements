@@ -2,60 +2,63 @@
 class QuantidadeDeResultados
 {
     static function calcularSemRegras($scenario) {
-        return pow($scenario->npms, $scenario->nvms);
+        return pow($scenario['npms'], $scenario['nvms']);
     }
     
     static function calcularComRegras($scenario) {
         $retorno = 1;
-        foreach ($scenario->placements as $vm) {
+        foreach ($scenario['placements'] as $vm) {
             $retorno*= count($vm);
         }
         return $retorno;
     }
-    static function calcularComRegrasMaxVM($scenario, $maxVM) {
-    	//TODO Implementar!!!
+
+    function calcularComRegrasMaxVMProd($scenario, $maxVM) {
+        $todas = 1;
+        foreach ($scenario['rpm'] as $pmName => $vms) {
+            $combinacao = QuantidadeDeResultados::calcCombination($vms, $maxVM);
+            //echo "Desejados da PM($pmName): $combinacao\n ";
+            $todas *= $combinacao;
+        }
+        return $todas;
     }
-    
-    function calcBountMax($matrix, $max) {
-        list($V, $P) = montaVeP($matrix);
+
+    function calcularComRegrasMaxVMSum($scenario, $maxVM) {
+        $todas = 0;
+        foreach ($scenario['rpm'] as $pmName => $vms) {
+            $combinacao = QuantidadeDeResultados::calcCombination($vms, $maxVM);
+            //echo "Desejados da PM($pmName): $combinacao\n ";
+            $todas += $combinacao;
+        }
+        return $todas;
+    }
+
+    function calcularComRegrasMaxVMSub($scenario, $maxVM) {
+
         $indesejado = 0;
-        $todas = array_product($V);
-        foreach ($P as $pmName => $pm) {
+
+        $todas = array_product($scenario['rvm']);
+        foreach ($scenario['rpm'] as $pmName => $pm) {
             $pm_tmp = 0;
-            if ($pm > $max) {
-                for ($i = $max + 1; $i <= $pm; $i++) {
-                    $tmp = calcCombination($pm, $i);
+            if ($pm > $maxVM) {
+                for ($i = $maxVM + 1; $i <= $pm; $i++) {
+                    $tmp = QuantidadeDeResultados::calcCombination($pm, $i);
                     $pm_tmp+= $tmp;
                 }
             }
-            echo "Indesejados da PM($pmName): $pm_tmp\n ";
+            //echo "Indesejados da PM($pmName): $pm_tmp\n ";
             $indesejado+= $pm_tmp;
         }
         return $todas - $indesejado;
     }
-
-    function montaVeP($matrix) {
-        $resp['vms'] = array();
-        $resp['pms'] = array();
-        foreach ($matrix as $vm_places) {
-            foreach ($vm_places as $place) {
-                
-                //echo "Analisando $place \n";
-                list($vmName, $pmName) = explode(':', $place);
-                @$resp['pms']["$pmName"]+= 1;
-                @$resp['vms']["$vmName"]+= 1;
-            }
-        }
-        return array($resp['vms'], $resp['pms']);
-    }
-    
+  
     function fact($a) {
         if ($a <= 1) return 1;
-        else return $a * fact(($a - 1));
+        else return $a * QuantidadeDeResultados::fact(($a - 1));
     }
     
     function calcCombination($n, $s) {
-        $resp = fact($n) / (fact($s) * fact($n - $s));
+        $resp = QuantidadeDeResultados::fact($n) / (QuantidadeDeResultados::fact($s) * QuantidadeDeResultados::fact($n - $s));
         return $resp;
     }
 
