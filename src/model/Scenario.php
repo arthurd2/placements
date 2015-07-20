@@ -67,6 +67,8 @@ class Scenario
         $places = Scenario::getFilledArrayWithTrue($scenario['placements']);
         $vms = array_keys($scenario['rvm']);
         $pms = array_keys($scenario['rpm']);
+        ksort($pms);
+        ksort($vms);
         $resp = array();
 
         foreach ($vms as $v) {
@@ -81,6 +83,7 @@ class Scenario
         $resp = "data.addColumn('string', 'Name');\n";
         $fmt = "data.addColumn('boolean', '%s');\n";
         $pms = array_keys($scenario['rpm']);
+        ksort($pms);
         foreach ($pms as $value) {
             $resp .= sprintf($fmt,$value);
         }
