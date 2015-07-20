@@ -1,0 +1,12 @@
++- Cria funções de geracao de possibilidades
++-- Criar testes
++-- Criar funções
++- Criar função de filtragem
++-- Criar testes
++-- Criar função
++- Criar função de geracao de possibilidades ja filtrado
++-- Criar testes
++-- Criar função
+-- Arrumar os testes para descobrir pq esta retornando 0
+- Criar cenarios pequenos para plotar
+- Alterar a Geracao de codigos para imprimir os numeros reais tambem
