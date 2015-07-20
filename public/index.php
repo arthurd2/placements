@@ -16,7 +16,7 @@ $scenario = array_shift($scenarios);
 $header = Scenario::toGoogleTableHeader($scenario);
 $lines = Scenario::toGoogleTableLines($scenario);
 $memcache = memcache_connect('localhost', 11211);
-$accordion = memcache_get($memcache, 'accordionn');
+$accordion = memcache_get($memcache, 'accordion');
 $max = 3;
 if ($accordion == false) {
 	echo "<script>alert('Not Cached');</script>";
