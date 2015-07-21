@@ -36,6 +36,7 @@ class CombinationsTest extends PHPUnit_Framework_TestCase
             'b' => array('B:1', 'B:2'), 
             'c' => array('C:2', 'C:3'), 
             'd' => array('D:1', 'D:2', 'D:3'));
+        //$filtered = Combinations::GenerateAllCombinationsMaxVM(array_values($scenario['placements']),2);
         $filtered = Combinations::GenerateAllCombinationsMaxVM($scenario['placements'],2);
         $this->assertEquals(16,count($filtered));
         $filtered = Combinations::GenerateAllCombinationsMaxVM($scenario['placements'],3);

@@ -1,10 +1,10 @@
 <?php
 class Combinations
 {
-    static function GenerateAllCombinations($arrays, $i = 0) {
-        if (!isset($arrays[$i])) {
-            return array();
-        }
+
+    static function GenerateAllCombinations(&$arrays, $i = 0) {
+        $news = array_pop( array_slice( $arrays , $i , 1 ));
+
         if ($i == count($arrays) - 1) {
             return $arrays[$i];
         }
@@ -22,30 +22,44 @@ class Combinations
         return $result;
     }
 
-    static function GenerateAllCombinationsMaxVM(&$arrays, $max, $i = 0) {
-        //$arrays = ($i == 0)? array_values($arrays1) : $arrays1;
-
-        if (!isset($arrays[$i])) 
-            return array();
+    static function GenerateAllCombinationsMaxVM(&$arrays, $max, $i = 0, &$hash_vm = array()) {
         
-        if ($i == count($arrays) - 1) 
-            return $arrays[$i];
+        $news = array_pop( array_slice( $arrays , $i , 1 ));
+
+        if ($i == count($arrays) - 1) {
+            $resp = array();
+            foreach ($news as $v) {
+
+                list($vm_name , $pm_name) = explode(':', $v);
+                $resp[] = array($v,'stat' => array($pm_name => 1));
+            }
+            return $resp;
+        }
         
         // get combinations from subsequent arrays
-        $tmp = Combinations::GenerateAllCombinationsMaxVM($arrays, $max, $i + 1);
+        $tmp = Combinations::GenerateAllCombinationsMaxVM($arrays, $max, $i + 1,$hash_vm);
         $result = array();
         
         // concat each array from tmp with each element from $arrays[$i]
-        foreach ($arrays[$i] as $v) 
-            foreach ($tmp as $t) 
-                //Checks if the new possibility will overload the PM
-                if(count($t) >= $max and !Combinations::WillOverload($v,$t,$max))
-                    $result[] = is_array($t) ? array_merge(array($v), $t) : array($v, $t);
-
+        //$news = array_slice($arrays, $i,1);
+        foreach ( $news as $v) {
+            list($vm_name , $pm_name) = explode(':', $v);
+            foreach ($tmp as $t) {
+                if( !isset($t['stat'][$pm_name]) or $t['stat'][$pm_name] < $max ){
+                    $state = array_merge(array($v), $t) ;
+                    $state['stat'][$pm_name] = isset($state['stat'][$pm_name])? $state['stat'][$pm_name]+1 : 1 ;
+                    $result[] = $state;
+                }
+            }
+        }
+        if($i == 0) 
+            foreach ($result as &$value) 
+                unset($value['stat']);
+        
         return $result;
     }
 
-    static function WillOverload(&$v,&$t,&$max){
+    static function WillOverload($v,$t,$max){
         if (!is_array($t))
             return false;
         list($null , $pm_name_new) = explode(':', $v);
@@ -56,7 +70,7 @@ class Combinations
             if ($pm_name_new == $pm_name)
                 $count++;
         }
-        return $count > $max;
+        return ($count > $max);
     }
 
     static function FilterCombinationsByMaxVm($combinations, $max) {

@@ -92,15 +92,22 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(10,$resp);
     }
 
-        public function testTemporario() {
-        $scenario['rvm'] = array('A'=>2,'B'=>2,'C'=>2,'D'=>3);
-        $scenario['rpm'] = array('1'=>2,'2'=>4,'3'=>3);
+    /**
+     * @depends testMontarSumario
+     */
+    public function testcalcularComRegrasMaxVMSubProdOthers() {
+        $scenario['rvm'] = array('A'=>2,'B'=>2,'C'=>2,'D'=>2,'E'=>2,'F'=>2);
+        $scenario['rpm'] = array('1'=>3,'2'=>5,'3'=>4);
         $scenario['placements'] = array(
-            array('A:2', 'A:3'), 
-            array('B:1', 'B:2'), 
-            array('C:2', 'C:3'), 
-            array('D:1', 'D:2', 'D:3'));
-        $resp = QuantidadeDeResultados::calcularComRegrasMaxVMSum($scenario,2);
-        $this->assertEquals(10,$resp);
+            array('A:1', 'A:2'), 
+            array('B:2', 'B:3'), 
+            array('C:1', 'C:3'), 
+            array('D:1', 'D:2'),
+            array('E:2', 'E:3'),
+            array('F:2', 'F:3'),
+            );
+        $resp = QuantidadeDeResultados::calcularComRegrasMaxVMSubProdOthers($scenario,3);
+        $this->assertEquals(48,$resp);
     }
+
 }

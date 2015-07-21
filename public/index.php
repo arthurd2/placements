@@ -13,12 +13,17 @@ $file = file($path . $filemane . '.json');
 $scenarios = json_decode($file[0], true);
 $scenarios = array_reverse($scenarios);
 $scenario = array_pop($scenarios);
-
+$scenarios[] = $scenario ;
 $header = Scenario::toGoogleTableHeader($scenario);
 $lines = Scenario::toGoogleTableLines($scenario);
 $memcache = memcache_connect('localhost', 11211);
-$accordion = memcache_get($memcache, 'accordion');
-$max = 3;
+
+$max = isset($_GET['max'])?$_GET['max']:3;
+
+$accordion = isset($_GET['cache']) ? false : memcache_get($memcache, 'accordion');
+
+
+
 if ($accordion == false) {
 	echo "<script>alert('Not Cached');</script>";
     $resultados = array();
@@ -31,8 +36,9 @@ if ($accordion == false) {
         $sub = QuantidadeDeResultados::calcularComRegrasMaxVMSub($value, $max);
         
         //$prod = QuantidadeDeResultados::calcularComRegrasMaxVMProd($value, $max);
-        $real_r = Combinations::GenerateAllCombinations(array_values($value['placements']));
-        $filtered = Combinations::FilterCombinationsByMaxVm($real_r, $max);
+        //$real_r = Combinations::GenerateAllCombinations(array_values($value['placements']));
+        //$filtered = Combinations::FilterCombinationsByMaxVm($real_r, $max);
+        $filtered = Combinations::GenerateAllCombinationsMaxVM($value['placements'],$max);
         $real = count($filtered);
         
         //VM(%s) PM(%s) Real(%s) UpperBound(%s) RFC(%s) NoRules(%s)
