@@ -21,28 +21,25 @@ $memcache = memcache_connect('localhost', 11211);
 $max = isset($_GET['max'])?$_GET['max']:3;
 
 $accordion = isset($_GET['cache']) ? false : memcache_get($memcache, 'accordion');
+$accordion = false;
 
 
 
 if ($accordion == false) {
-	echo "<script>alert('Not Cached');</script>";
+	//echo "<script>alert('Not Cached');</script>";
     $resultados = array();
     $accordion = new Accordion();
     foreach ($scenarios as $key => $value) {
         $sem = QuantidadeDeResultados::calcularSemRegras($value);
         $com = QuantidadeDeResultados::calcularComRegras($value);
         
-        //$sum = QuantidadeDeResultados::calcularComRegrasMaxVMSum($value, $max);
-        $sub = QuantidadeDeResultados::calcularComRegrasMaxVMSub($value, $max);
+        $last = QuantidadeDeResultados::calcularComRegrasMaxVMSub($value, $max);
+        $test = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($value, $max);
         
-        //$prod = QuantidadeDeResultados::calcularComRegrasMaxVMProd($value, $max);
-        //$real_r = Combinations::GenerateAllCombinations(array_values($value['placements']));
-        //$filtered = Combinations::FilterCombinationsByMaxVm($real_r, $max);
         $filtered = Combinations::GenerateAllCombinationsMaxVM($value['placements'],$max);
         $real = count($filtered);
         
-        //VM(%s) PM(%s) Real(%s) UpperBound(%s) RFC(%s) NoRules(%s)
-        $title = sprintf($fmt_accordion_title, $max, $value['nvms'], $value['npms'], $real, $sub, $com, $sem);
+        $title = sprintf($fmt_accordion_title, $max, $value['nvms'], $sem, $com, $last, $test, $real );
         $body = sprintf($fmt_accordion_body, ViewHelper::printState($filtered));
         $accordion->add($title, $body);
     }

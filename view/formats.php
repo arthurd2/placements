@@ -39,5 +39,5 @@ $fmt_charts = '
   </body>
 </html>
 ';
-$fmt_accordion_title = 'MaxVMs[%s] VM(%s) PM(%s) Real(%s) UpperBound(%s) RFC(%s) NoRules(%s)';
+$fmt_accordion_title = 'MaxVMs:%s VM:%s NoRules:%s RFC:%s | UpperBound1:%s  UpperBound2:%s | Real:%s   ';
 $fmt_accordion_body = '%s';

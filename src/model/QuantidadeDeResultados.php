@@ -62,7 +62,8 @@ class QuantidadeDeResultados
         return $resp;
     }
     function getOtherMultiplier($pm, $scenario) {
-        $return = 1;
+        $outsider = 1;
+        $insider = 0;
         foreach ($scenario['placements'] as $vm => $places) {
             $flag = true;
             foreach ($places as $place) {
@@ -73,11 +74,31 @@ class QuantidadeDeResultados
                     break;
                 }
             }
-            $return *= $flag? count($places): 1 ;
+            $outsider *= $flag? count($places): 1 ;
+            $insider += $flag? 0 : count($places)-1;
         }
-        return $return;
+        return array( $outsider, $insider);
     }
     
+    function calcularComRegrasMaxVMOutIn($scenario, $maxVM) {
+        $indesejado = 0;
+        $todas = array_product($scenario['rvm']);
+
+        foreach ($scenario['rpm'] as $pmName => $pm) {
+            $pm_tmp = 0;
+            if ($pm > $maxVM) {
+                list($out,$in) = QuantidadeDeResultados::getOtherMultiplier($pmName,$scenario);
+                for ($i = $maxVM+1; $i <= $pm; $i++) {
+                    $expo = $pm - $i;
+                    //echo "\nPM($pm) | O($out) I($in) | POW($expo) <br>\n";
+                    $pm_tmp+= $out*pow($in,$expo);
+                }
+            }
+            $indesejado+= $pm_tmp;
+        }
+        return $todas - $indesejado;
+    }
+
     function calcularComRegrasMaxVMSubProdOthers($scenario, $maxVM) {
 
         $indesejado = 0;
@@ -86,8 +107,7 @@ class QuantidadeDeResultados
         foreach ($scenario['rpm'] as $pmName => $pm) {
             $pm_tmp = 0;
             if ($pm > $maxVM) {
-                $multi = QuantidadeDeResultados::getOtherMultiplier($pmName,$scenario);
-                //echo "\nPM($pmName) - Multi($multi) \n";
+                list($multi,$null) = QuantidadeDeResultados::getOtherMultiplier($pmName,$scenario);
                 for ($i = $maxVM+1; $i <= $pm; $i++) {
                     $tmp = QuantidadeDeResultados::calcCombination($pm, $i)*$multi;
                     $pm_tmp+= $tmp;
