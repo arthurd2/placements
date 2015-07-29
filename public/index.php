@@ -35,6 +35,7 @@ if ($accordion == false) {
         
         $last = QuantidadeDeResultados::calcularComRegrasMaxVMSub($value, $max);
         $test = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($value, $max);
+        //$test = QuantidadeDeResultados::calcularComRegrasMaxVMSum($value, $max);
         
         $filtered = Combinations::GenerateAllCombinationsMaxVM($value['placements'],$max);
         $real = count($filtered);

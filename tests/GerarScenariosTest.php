@@ -49,4 +49,25 @@ data.addColumn('boolean', '3');\n";
         $resp = Scenario::toGoogleTableHeader($scenario);
         $this->assertEquals($expect,$resp);
     }
+
+
+    public function testbuildScenarioByPlacements(){
+        $rvm = array('A'=>2,'B'=>2,'C'=>2,'D'=>3);
+        $rpm = array('1'=>2,'2'=>4,'3'=>3);
+        $placements = array(
+            array('A:2', 'A:3'), 
+            array('B:1', 'B:2'), 
+            array('C:2', 'C:3'), 
+            array('D:1', 'D:2', 'D:3')
+            );
+        
+        $scenario = Scenario::buildScenarioByPlacements($placements);
+        $this->assertEquals($placements,$scenario['placements'],'Placements not equal');
+        $this->assertEquals(count($rvm),$scenario['nvms'],'Number of VM are not the same');
+        $this->assertEquals(count($rpm),$scenario['npms'],'Number of PM are not the same');
+        $this->assertEquals($rvm,$scenario['rvm'],'VM report is not the same');
+        $this->assertEquals($rpm,$scenario['rpm'],'PM report is not the same');
+    }
+
+
 }

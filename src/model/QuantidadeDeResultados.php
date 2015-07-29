@@ -61,9 +61,10 @@ class QuantidadeDeResultados
         $resp = QuantidadeDeResultados::fact($n) / (QuantidadeDeResultados::fact($s) * QuantidadeDeResultados::fact($n - $s));
         return $resp;
     }
-    function getOtherMultiplier($pm, $scenario) {
+
+    function getOutsidersInsiders($pm, $scenario) {
         $outsider = 1;
-        $insider = 0;
+        $insider = array();
         foreach ($scenario['placements'] as $vm => $places) {
             $flag = true;
             foreach ($places as $place) {
@@ -74,29 +75,33 @@ class QuantidadeDeResultados
                     break;
                 }
             }
-            $outsider *= $flag? count($places): 1 ;
-            $insider += $flag? 0 : count($places)-1;
+            if($flag)
+                $outsider *= count($places);
+            else
+                $insider[] = count($places)-1;
         }
         return array( $outsider, $insider);
     }
     
     function calcularComRegrasMaxVMOutIn($scenario, $maxVM) {
-        $indesejado = 0;
-        $todas = array_product($scenario['rvm']);
+        $unwanted = 0;
+        $all = array_product($scenario['rvm']);
 
-        foreach ($scenario['rpm'] as $pmName => $pm) {
-            $pm_tmp = 0;
-            if ($pm > $maxVM) {
-                list($out,$in) = QuantidadeDeResultados::getOtherMultiplier($pmName,$scenario);
-                for ($i = $maxVM+1; $i <= $pm; $i++) {
-                    $expo = $pm - $i;
-                    //echo "\nPM($pm) | O($out) I($in) | POW($expo) <br>\n";
-                    $pm_tmp+= $out*pow($in,$expo);
+        foreach ($scenario['rpm'] as $pmName => $numOfVMsInPM) {
+            $unwantedLocal = 0;
+            if ($numOfVMsInPM > $maxVM) {
+                list($out,$in) = QuantidadeDeResultados::getOutsidersInsiders($pmName,$scenario);
+                //error_log(print_r($in));
+                for ($i = $maxVM+1; $i <= $numOfVMsInPM; $i++) {
+                    $in_consolidated = QuantidadeDeResultados::getInsidersCombinations($in, $numOfVMsInPM-$i);
+                    $unwantedLocal += $out * $in_consolidated;
                 }
             }
-            $indesejado+= $pm_tmp;
+            //error_log("PM($pmName) - Unwanted($unwantedLocal)<br>");
+            $unwanted += $unwantedLocal;
         }
-        return $todas - $indesejado;
+        //echo "<br>----------------------------<br>";
+        return $all - $unwanted;
     }
 
     function calcularComRegrasMaxVMSubProdOthers($scenario, $maxVM) {
@@ -107,7 +112,7 @@ class QuantidadeDeResultados
         foreach ($scenario['rpm'] as $pmName => $pm) {
             $pm_tmp = 0;
             if ($pm > $maxVM) {
-                list($multi,$null) = QuantidadeDeResultados::getOtherMultiplier($pmName,$scenario);
+                list($multi,$null) = QuantidadeDeResultados::getOutsidersInsiders($pmName,$scenario);
                 for ($i = $maxVM+1; $i <= $pm; $i++) {
                     $tmp = QuantidadeDeResultados::calcCombination($pm, $i)*$multi;
                     $pm_tmp+= $tmp;
@@ -118,6 +123,23 @@ class QuantidadeDeResultados
         }
         return $todas - $indesejado;
     }
+    function getInsidersCombinations(&$insiders, $size){
+        if($size <= 0) return 1;
+        $subtrees = QuantidadeDeResultados::_getInsidersCombinations( $insiders, $size);
+        return array_sum($subtrees);
+    }
 
+    function _getInsidersCombinations(&$insiders, $size,$pos = 0){
+        if($size <= 0) return array(1);
 
+        $return = array();
+        $end = count($insiders)-$size;
+        
+        for ( $i = $pos ; $i <= $end ; $i++ ){
+            $subtree = QuantidadeDeResultados::_getInsidersCombinations( $insiders, $size-1, $i+1);
+            foreach ($subtree as $value) 
+                $return[] = $insiders[$i]*$value;
+        }
+        return $return;
+    }
 }

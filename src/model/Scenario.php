@@ -53,6 +53,23 @@ class Scenario
         return $retorno;
     }
 
+    function buildScenarioByPlacements(&$placements) {
+        $scenario['placements'] = $placements;
+        $scenario['rpm'] = array();
+        $scenario['rvm'] = array();
+
+        foreach ($placements as $vms) {
+            foreach ($vms as $place) {
+                list($nameVM,$namePM) = explode(':', $place);
+                $scenario['rpm'][$namePM] = isset($scenario['rpm'][$namePM])? $scenario['rpm'][$namePM]+1 : 1;
+                $scenario['rvm'][$nameVM] = isset($scenario['rvm'][$nameVM])? $scenario['rvm'][$nameVM]+1 : 1;
+            }
+        }
+        $scenario['nvms'] = count($scenario['rvm']);
+        $scenario['npms'] = count($scenario['rpm']);
+        return $scenario;
+    }
+
     static function getFilledArrayWithTrue($placements){
         $resp = array();
         foreach ($placements as $vm => $places) 
