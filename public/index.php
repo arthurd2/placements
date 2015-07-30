@@ -6,46 +6,47 @@ require_once "../src/model/Combinations.php";
 require_once "../view/Accordion.php";
 require_once "../view/ViewHelper.php";
 
-$path = '../src/';
-$filemane = 'Scenarios_APR(0.75)_VMs(4,5,6,7,8,9)_PMs(3).2';
+ini_set('xdebug.max_nesting_level', 1000);
+$max = isset($_GET['max']) ? $_GET['max'] : 3;
+$nvm = isset($_GET['nvm']) ? $_GET['nvm'] : 7;
+$npm = isset($_GET['npm']) ? $_GET['npm'] : 3;
+$apr = isset($_GET['apr']) ? $_GET['apr'] : 0.75;
 
-$file = file($path . $filemane . '.json');
-$scenarios = json_decode($file[0], true);
-$scenarios = array_reverse($scenarios);
-$scenario = array_pop($scenarios);
-$scenarios[] = $scenario ;
-$header = Scenario::toGoogleTableHeader($scenario);
-$lines = Scenario::toGoogleTableLines($scenario);
-$memcache = memcache_connect('localhost', 11211);
-
-$max = isset($_GET['max'])?$_GET['max']:3;
-
-$accordion = isset($_GET['cache']) ? false : memcache_get($memcache, 'accordion');
-$accordion = false;
-
-
-
-if ($accordion == false) {
-	//echo "<script>alert('Not Cached');</script>";
-    $resultados = array();
-    $accordion = new Accordion();
-    foreach ($scenarios as $key => $value) {
-        $sem = QuantidadeDeResultados::calcularSemRegras($value);
-        $com = QuantidadeDeResultados::calcularComRegras($value);
-        
-        $last = QuantidadeDeResultados::calcularComRegrasMaxVMSub($value, $max);
-        $test = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($value, $max);
-        //$test = QuantidadeDeResultados::calcularComRegrasMaxVMSum($value, $max);
-        
-        $filtered = Combinations::GenerateAllCombinationsMaxVM($value['placements'],$max);
-        $real = count($filtered);
-        
-        $title = sprintf($fmt_accordion_title, $max, $value['nvms'], $sem, $com, $last, $test, $real );
-        $body = sprintf($fmt_accordion_body, ViewHelper::printState($filtered));
-        $accordion->add($title, $body);
-    }
-    memcache_set($memcache, 'accordion',$accordion);
+if (isset($_GET['state'])) {
+    $scenario = Scenario::getScenarioFromJSON($_GET['state']);
+} 
+else {
+    $scenarios = Scenario::geraScenarios($apr, array($nvm), array($npm));
+    $scenario = array_pop($scenarios);
 }
 
+$json = Scenario::toDataTableJSON($scenario);
+
+//$memcache = memcache_connect('localhost', 11211);
+//$accordion = isset($_GET['cache']) ? false : memcache_get($memcache, 'accordion');
+//$accordion = false;
+//if ($accordion == false) {
+//echo "<script>alert('Not Cached');</script>";
+
+$accordion = new Accordion();
+$sem = QuantidadeDeResultados::calcularSemRegras($scenario);
+$com = QuantidadeDeResultados::calcularComRegras($scenario);
+
+$last = QuantidadeDeResultados::calcularComRegrasMaxVMSub($scenario, $max);
+$test = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($scenario, $max);
+
+$filtered = Combinations::GenerateAllCombinationsMaxVM($scenario['placements'], $max);
+$real = count($filtered);
+
+$title = sprintf($fmt_accordion_title, $max, $scenario['nvms'], $sem, $com, $last, $test, $real);
+$body = sprintf($fmt_accordion_body, ViewHelper::printState($filtered));
+$accordion->add($title, $body);
+
+//memcache_set($memcache, 'accordion', $accordion);
+//}
+
 $srt_accordion = $accordion->get();
-echo sprintf($fmt_charts, $header, $lines, $srt_accordion);
+$genScenario = sprintf($fmt_genscenario,$max,$nvm,$npm,$apr);
+
+$buttons = ViewHelper::getPmControlButtons($scenario['npms']);
+echo sprintf($fmt_charts, $json,$genScenario, $srt_accordion,$buttons);

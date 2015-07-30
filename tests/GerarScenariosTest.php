@@ -9,7 +9,7 @@ class GerarScenariosTest extends PHPUnit_Framework_TestCase
         $npms = 10;
         $apr = 0.5;
 
-        list($places, $r_vm, $r_pm) = Scenario::geraScenario($apr,$nvms,$npms);
+        list($places, $r_vm, $r_pm) = Scenario::geraPlacements($apr,$nvms,$npms);
         $this->assertEquals($nvms,count($places),"Numero de VMs esta errado.");
 
         $total = 0;
@@ -69,5 +69,31 @@ data.addColumn('boolean', '3');\n";
         $this->assertEquals($rpm,$scenario['rpm'],'PM report is not the same');
     }
 
+
+    /**
+     * @depends testbuildScenarioByPlacements
+     */
+    public function testJsonToScenario(){
+        $placements = array(
+            array('A:2', 'A:3'), 
+            array('B:1', 'B:2'), 
+            array('C:2', 'C:3'), 
+            array('D:1', 'D:2', 'D:3')
+            );
+        
+        $scenario1 = Scenario::buildScenarioByPlacements($placements);
+        $json = Scenario::toDataTableJSON($scenario1);
+        $scenario2 = Scenario::getScenarioFromJSON($json);
+
+        $this->assertEquals($scenario1['nvms'],$scenario2['nvms'],'VM # !match');
+        $this->assertEquals($scenario1['npms'],$scenario2['npms'],'PM # !match');
+
+        foreach ($scenario1['rvm'] as $key => $value) 
+            $this->assertEquals($value,$scenario2['rvm'][$key],"# of placements of $key !match");
+
+         foreach ($scenario1['rpm'] as $key => $value)
+            $this->assertEquals($value,$scenario2['rpm'][$key],"# of placements of $key !match");
+ 
+    }
 
 }

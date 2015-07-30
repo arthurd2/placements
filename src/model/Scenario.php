@@ -8,7 +8,7 @@ class Scenario
 
     private function __construct(){}
 
-    static function  geraScenario( $apr,  $nvm,  $npm) {
+    static function  geraPlacements( $apr,  $nvm,  $npm) {
         
         //Bloco que gera um array com a distribuição inicial de Placements 
         //igual a $apr - Ex. 0.75 e 100PM geram 75 placements possiveis
@@ -37,16 +37,16 @@ class Scenario
         $retorno = array();
         foreach ($nvms as $nvm) {
             foreach ($npms as $npm) {
-                $scenario = new Scenario();
-                $scenario->apr = $apr;
-                $scenario->nvms = $nvm;
-                $scenario->npms = $npm;
-                list($places, $r_vm, $r_pm) = Scenario::geraScenario($apr, $nvm, $npm);
-                $scenario->placements = $places;
+                $scenario = array();
+                $scenario['apr'] = $apr;
+                $scenario['nvms'] = $nvm;
+                $scenario['npms'] = $npm;
+                list($places, $r_vm, $r_pm) = Scenario::geraPlacements($apr, $nvm, $npm);
+                $scenario['placements'] = $places;
                 //Resumo: array cuja key é o nome da VM e o valor é o numero de placements possiveis que ela pode estas
-                $scenario->rvm = $r_vm;
+                $scenario['rvm'] = $r_vm;
                 //Resumo: array cuja key é o nome da PM e o valor é o numero de VM que ela teoricamente pode hospedar
-                $scenario->rpm = $r_pm;
+                $scenario['rpm'] = $r_pm;
                 $retorno["r-$apr,v-$nvm,p-$npm"] = $scenario;
             }
         }
@@ -80,7 +80,7 @@ class Scenario
         return $resp;
     }
 
-    static function toGoogleTableLines($scenario){
+    static function toGoogleTableLines($scenario){ //TODO deprecated
         $places = Scenario::getFilledArrayWithTrue($scenario['placements']);
         $vms = array_keys($scenario['rvm']);
         $pms = array_keys($scenario['rpm']);
@@ -96,7 +96,7 @@ class Scenario
         }
         return "data.addRows([\n".implode(",\n", $resp)."\n]);";
     }
-    static function toGoogleTableHeader($scenario){
+    static function toGoogleTableHeader($scenario){ //TODO deprecated
         $resp = "data.addColumn('string', 'Name');\n";
         $fmt = "data.addColumn('boolean', '%s');\n";
         $pms = array_keys($scenario['rpm']);
@@ -105,5 +105,46 @@ class Scenario
             $resp .= sprintf($fmt,$value);
         }
         return $resp;
+    }
+
+    static function toDataTableJSON($scenario){
+        $resp = array();
+        $pms = array_keys($scenario['rpm']);
+        $vms = array_keys($scenario['rvm']);
+        $places = Scenario::getFilledArrayWithTrue($scenario['placements']);
+        $resp['cols'][] = array('label'=>'VMs','type'=>'string');
+
+        foreach ($pms as $pmName) {
+            $resp['cols'][] = array('label'=>$pmName,'type'=>'boolean');
+        }
+        foreach ($vms as $v) {
+            $rows = array();
+            $rows[] = array( 'v' => $v );
+            foreach ($pms as $p) 
+                $rows[] = array( 'v' => isset($places[$v][$p])? true : false );
+            $resp['rows'][] = array( 'c' => $rows );
+        }
+        return json_encode($resp);
+    }
+    static function getScenarioFromJSON($json){
+        $table = json_decode($json,true);
+        $resp = array();
+        unset($table['cols'][0]);
+        foreach ($table['cols'] as $k => $v) {
+            $pms[] = $v['label'];
+        }
+        $placements = array();
+        foreach ($table['rows'] as $r => $row) {
+            $tmp = array_shift($row['c']);
+            $vm = $tmp['v'];
+            foreach ($row['c'] as $k => $c) {
+                if($c['v'] == 1){
+                    $pm = $pms[$k];
+                    $placements[$r][] = "$vm:$pm";
+                }
+            }
+        }
+
+        return Scenario::buildScenarioByPlacements($placements);
     }
 }

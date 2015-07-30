@@ -138,6 +138,8 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(8,QuantidadeDeResultados::getInsidersCombinations($insiders,1));
         $this->assertEquals(23,QuantidadeDeResultados::getInsidersCombinations($insiders,2));
         $this->assertEquals(28,QuantidadeDeResultados::getInsidersCombinations($insiders,3));
+        $insiders = array(2,1,2,1,1,1);
+        $this->assertEquals(44,QuantidadeDeResultados::getInsidersCombinations($insiders,3));
         //$this->assertEquals(array(),QuantidadeDeResultados::_getInsidersCombinations($insiders,2));
     }
 
