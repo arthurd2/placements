@@ -53,7 +53,7 @@ class Scenario
         return $retorno;
     }
 
-    function buildScenarioByPlacements(&$placements) {
+    static function buildScenarioByPlacements(&$placements) {
         $scenario['placements'] = $placements;
         $scenario['rpm'] = array();
         $scenario['rvm'] = array();

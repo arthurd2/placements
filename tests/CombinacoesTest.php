@@ -4,12 +4,12 @@ require_once "src/model/Combinations.php";
 class CombinationsTest extends PHPUnit_Framework_TestCase
 {
     public function testAllCombinationsAndFilter() {
-        $scenario['placements'] = array(
+        $placements = array(
             array('A:2', 'A:3'), 
             array('B:1', 'B:2'), 
             array('C:2', 'C:3'), 
             array('D:1', 'D:2', 'D:3'));
-        $combinations = Combinations::GenerateAllCombinations($scenario['placements']);
+        $combinations = Combinations::GenerateAllCombinations($placements);
         $this->assertEquals(24,count($combinations));
 
         $filtered = Combinations::FilterCombinationsByMaxVm($combinations,2);
@@ -31,15 +31,15 @@ class CombinationsTest extends PHPUnit_Framework_TestCase
      * @depends testWillOverload
      */
     public function testGenerateAllCombinationsMaxVM() {
-        $scenario['placements'] = array(
+        $placements = array(
             'a' => array('A:2', 'A:3'), 
             'b' => array('B:1', 'B:2'), 
             'c' => array('C:2', 'C:3'), 
             'd' => array('D:1', 'D:2', 'D:3'));
         //$filtered = Combinations::GenerateAllCombinationsMaxVM(array_values($scenario['placements']),2);
-        $filtered = Combinations::GenerateAllCombinationsMaxVM($scenario['placements'],2);
+        $filtered = Combinations::GenerateAllCombinationsMaxVM($placements,2);
         $this->assertEquals(16,count($filtered));
-        $filtered = Combinations::GenerateAllCombinationsMaxVM($scenario['placements'],3);
+        $filtered = Combinations::GenerateAllCombinationsMaxVM($placements,3);
         $this->assertEquals(23,count($filtered));
     }
 

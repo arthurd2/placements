@@ -52,17 +52,17 @@ class QuantidadeDeResultados
         return $todas - $indesejado;
     }
   
-    function fact($a) {
+    static function fact($a) {
         if ($a <= 1) return 1;
         else return $a * QuantidadeDeResultados::fact(($a - 1));
     }
     
-    function calcCombination($n, $s) {
+    static function calcCombination($n, $s) {
         $resp = QuantidadeDeResultados::fact($n) / (QuantidadeDeResultados::fact($s) * QuantidadeDeResultados::fact($n - $s));
         return $resp;
     }
 
-    function getOutsidersInsiders($pm, $scenario) {
+    static function getOutsidersInsiders($pm, $scenario) {
         $outsider = 1;
         $insider = array();
         foreach ($scenario['placements'] as $vm => $places) {
