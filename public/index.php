@@ -49,4 +49,4 @@ $srt_accordion = $accordion->get();
 $genScenario = sprintf($fmt_genscenario,$max,$nvm,$npm,$apr);
 
 $buttons = ViewHelper::getPmControlButtons($scenario['npms']);
-echo sprintf($fmt_charts, $json,$genScenario, $srt_accordion,$buttons);
+echo sprintf($fmt_charts, $json, $srt_accordion, $genScenario, $buttons);

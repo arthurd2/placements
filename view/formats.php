@@ -73,12 +73,12 @@ $fmt_charts = '
   </head>
   <body>
     <div id="dados_div" style="float:left">
-      <div id="genScenario_div" style="width:300px,text-align:center,float:left" > %s </div>
       <div id="accordion" style="width:550px,float:left"> %s </div>
     </div>
-    <div id="table_div" style="wifth:600px,float:right">
-      <div id="pmcontrol_div"> %s </div>
-      <div id="table_div"></div>
+    <div id="table_div_all" style="wifth:600px;float:right">
+      <div id="genScenario_div" style="text-align:center;width:300px" > %s </div>
+      <div id="pmcontrol_div"   style="text-align:center"> %s </div>
+      <div id="table_div"       style="text-align:center"></div>
     </div>
   </body>
 </html>
@@ -91,4 +91,4 @@ Max:<input type="text" id="maxvm" value="%s"><br>
 #VM:<input type="text" id="nvm" value="%s"><br>
 #PM:<input type="text" id="npm" value="%s"><br>
 APR:<input type="text" id="apr" value="%s"><br>
-<button onclick=\'newscenario()\'>Generate New Scenario!</button>';
+<button onclick=\'newscenario()\'>Generate New Scenario!</button><br><br>';
