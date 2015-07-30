@@ -13,7 +13,7 @@ class QuantidadeDeResultados
         return $retorno;
     }
 
-    function calcularComRegrasMaxVMProd($scenario, $maxVM) {
+    static function calcularComRegrasMaxVMProd($scenario, $maxVM) {
         $todas = 1;
         foreach ($scenario['rpm'] as $pmName => $vms) {
             $combinacao = QuantidadeDeResultados::calcCombination($vms, $maxVM);
@@ -23,7 +23,7 @@ class QuantidadeDeResultados
         return $todas;
     }
 
-    function calcularComRegrasMaxVMSum($scenario, $maxVM) {
+    static function calcularComRegrasMaxVMSum($scenario, $maxVM) {
         $todas = 0;
         foreach ($scenario['rpm'] as $pmName => $vms) {
             $combinacao = QuantidadeDeResultados::calcCombination($vms, $maxVM);
@@ -33,7 +33,7 @@ class QuantidadeDeResultados
         return $todas;
     }
 
-    function calcularComRegrasMaxVMSub($scenario, $maxVM) {
+    static function calcularComRegrasMaxVMSub($scenario, $maxVM) {
 
         $indesejado = 0;
 
@@ -83,7 +83,7 @@ class QuantidadeDeResultados
         return array( $outsider, $insider);
     }
     
-    function calcularComRegrasMaxVMOutIn($scenario, $maxVM) {
+    static function calcularComRegrasMaxVMOutIn($scenario, $maxVM) {
         $unwanted = 0;
         $all = array_product($scenario['rvm']);
 
@@ -104,7 +104,7 @@ class QuantidadeDeResultados
         return $all - $unwanted;
     }
 
-    function calcularComRegrasMaxVMSubProdOthers($scenario, $maxVM) {
+    static function calcularComRegrasMaxVMSubProdOthers($scenario, $maxVM) {
 
         $indesejado = 0;
 
@@ -123,13 +123,13 @@ class QuantidadeDeResultados
         }
         return $todas - $indesejado;
     }
-    function getInsidersCombinations(&$insiders, $size){
+    static function getInsidersCombinations(&$insiders, $size){
         if($size <= 0) return 1;
         $subtrees = QuantidadeDeResultados::_getInsidersCombinations( $insiders, $size);
         return array_sum($subtrees);
     }
 
-    function _getInsidersCombinations(&$insiders, $size,$pos = 0){
+    static function _getInsidersCombinations(&$insiders, $size,$pos = 0){
         if($size <= 0) return array(1);
 
         $return = array();

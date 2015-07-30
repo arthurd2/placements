@@ -3,7 +3,7 @@ class Combinations
 {
 
     static function GenerateAllCombinations(&$arrays, $i = 0) {
-        $news = array_pop( array_slice( $arrays , $i , 1 ));
+        $news = array_pop( array_slice( clone($arrays) , $i , 1 ));
 
         if ($i == count($arrays) - 1) {
             return $arrays[$i];
@@ -24,7 +24,7 @@ class Combinations
 
     static function GenerateAllCombinationsMaxVM(&$arrays, $max, $i = 0, &$hash_vm = array()) {
         
-        $news = array_pop( array_slice( $arrays , $i , 1 ));
+        $news = array_pop( array_slice( clone($arrays) , $i , 1 ));
 
         if ($i == count($arrays) - 1) {
             $resp = array();
