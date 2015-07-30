@@ -3,7 +3,8 @@ class Combinations
 {
 
     static function GenerateAllCombinations(&$arrays, $i = 0) {
-        $news = array_pop( array_slice( clone($arrays) , $i , 1 ));
+        $slice = array_slice( $arrays , $i , 1 );
+        $news = array_pop( $slice );
 
         if ($i == count($arrays) - 1) {
             return $arrays[$i];
@@ -23,8 +24,8 @@ class Combinations
     }
 
     static function GenerateAllCombinationsMaxVM(&$arrays, $max, $i = 0, &$hash_vm = array()) {
-        
-        $news = array_pop( array_slice( clone($arrays) , $i , 1 ));
+        $slice = array_slice( $arrays , $i , 1 );
+        $news = array_pop( $slice );
 
         if ($i == count($arrays) - 1) {
             $resp = array();
@@ -83,7 +84,7 @@ class Combinations
         return $combinations;
     }
     
-    function montaVeP($matrix) {
+    static function montaVeP($matrix) {
         $resp['vms'] = array();
         $resp['pms'] = array();
         foreach ($matrix as $vm_places) {
@@ -95,7 +96,7 @@ class Combinations
         }
         return array($resp['vms'], $resp['pms']);
     }
-    function hasMoreThen($vms,$max){
+    static function hasMoreThen($vms,$max){
         foreach ($vms as $v) if($v > $max) return true;
         return false;
     }
