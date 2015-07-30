@@ -2,10 +2,7 @@
 class Combinations
 {
 
-    static function GenerateAllCombinations(&$arrays, $i = 0) {
-        $slice = array_slice( $arrays, $i , 1 );
-        $news = array_pop( $slice );
-
+    static function generateAllCombinations(&$arrays, $i = 0) {
         if ($i == count($arrays) - 1) {
             return $arrays[$i];
         }
@@ -15,24 +12,21 @@ class Combinations
         $result = array();
         
         // concat each array from tmp with each element from $arrays[$i]
-        foreach ($arrays[$i] as $v) {
-            foreach ($tmp as $t) {
+        foreach ($arrays[$i] as $v) 
+            foreach ($tmp as $t) 
                 $result[] = is_array($t) ? array_merge(array($v), $t) : array($v, $t);
-            }
-        }
         return $result;
     }
 
-    static function GenerateAllCombinationsMaxVM(&$arrays, $max, $i = 0, &$hash_vm = array()) {
+    static function generateAllCombinationsMaxVM(&$arrays, $max, $i = 0, &$hash_vm = array()) {
         $slice = array_slice( $arrays, $i , 1 );
         $news = array_pop( $slice );
 
         if ($i == count($arrays) - 1) {
             $resp = array();
             foreach ($news as $v) {
-
-                list($vm_name , $pm_name) = explode(':', $v);
-                $resp[] = array($v,'stat' => array($pm_name => 1));
+                list($vmName , $pmName) = explode(':', $v);
+                $resp[] = array($v,'stat' => array($pmName => 1));
             }
             return $resp;
         }
@@ -44,11 +38,11 @@ class Combinations
         // concat each array from tmp with each element from $arrays[$i]
         //$news = array_slice($arrays, $i,1);
         foreach ( $news as $v) {
-            list($vm_name , $pm_name) = explode(':', $v);
+            list($vmName , $pmName) = explode(':', $v);
             foreach ($tmp as $t) {
-                if( !isset($t['stat'][$pm_name]) or $t['stat'][$pm_name] < $max ){
+                if( !isset($t['stat'][$pmName]) or $t['stat'][$pmName] < $max ){
                     $state = array_merge(array($v), $t) ;
-                    $state['stat'][$pm_name] = isset($state['stat'][$pm_name])? $state['stat'][$pm_name]+1 : 1 ;
+                    $state['stat'][$pmName] = isset($state['stat'][$pmName])? $state['stat'][$pmName]+1 : 1 ;
                     $result[] = $state;
                 }
             }
@@ -60,21 +54,21 @@ class Combinations
         return $result;
     }
 
-    static function WillOverload($v,$t,$max){
+    static function willOverload($v,$t,$max){
         if (!is_array($t))
             return false;
-        list($null , $pm_name_new) = explode(':', $v);
+        list($null , $pmName_new) = explode(':', $v);
         $count = 1;
         foreach ($t as $place) {
-            list($null,$pm_name) = explode(':', $place);
+            list($null,$pmName) = explode(':', $place);
             //checar se a performance melhora com um array de counters
-            if ($pm_name_new == $pm_name)
+            if ($pmName_new == $pmName)
                 $count++;
         }
         return ($count > $max);
     }
 
-    static function FilterCombinationsByMaxVm($combinations, $max) {
+    static function filterCombinationsByMaxVm($combinations, $max) {
         foreach ($combinations as $key => $combination) {
             list($v, $p) = Combinations::montaVeP(array($combination));
             if (Combinations::hasMoreThen($p, $max)) {
