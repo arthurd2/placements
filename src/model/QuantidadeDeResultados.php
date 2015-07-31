@@ -142,4 +142,47 @@ class QuantidadeDeResultados
         }
         return $return;
     }
+    static function calculateAvgCombSplitterApproach($scenario, $maxVM) {
+        $quantities = QuantidadeDeResultados::getCombinatorialSliceQuantities($scenario, $maxVM);
+        return array_sum($quantities)/count($quantities);
+    }
+    static function calculateProdSequencialSplitterApproach($scenario, $maxVM) {
+        $quantities = QuantidadeDeResultados::getSequencialSliceQuantities($scenario, $maxVM);
+        return array_product($quantities);
+    }
+    static function getSequencialSliceQuantities($scenario, $maxVM) {
+        $slice_size = ($maxVM*2) + 1 ;
+        $quatities = array();
+
+        $p = 0;
+        while ( $p < $scenario['nvms']){
+            $slice = array_slice($scenario['placements'], $p, $slice_size);
+            $slice_scenario = Scenario::buildScenarioByPlacements($slice);
+            $quatities[] = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($slice_scenario,$maxVM);
+            $p += $slice_size;
+        }
+
+        return $quatities;
+    }
+    static function getCombinatorialSliceQuantities($scenario, $maxVM) {
+        require_once 'libs/Combinatorics.php';
+        $combinatorics = new Math_Combinatorics;
+        $slice_size = ($maxVM*2) + 1 ;
+
+        $input = array_keys($scenario['placements']);
+        $combinations = $combinatorics->combinations($input, $slice_size); // 5 is the subset size
+
+        $quatities = array();
+
+        foreach ($combinations as $combination) {
+            $slice = array();
+            foreach ($combination as $index) {
+                $slice[] = $scenario['placements'][$index];
+            }
+            $slice_scenario = Scenario::buildScenarioByPlacements($slice);
+            $quatities[] = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($slice_scenario,$maxVM);
+        }
+
+        return $quatities;
+    }
 }

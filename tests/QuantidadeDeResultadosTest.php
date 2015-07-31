@@ -164,4 +164,57 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
         $resp = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($scenario,3);
         $this->assertEquals(72,$resp,"# of approximation !match.");
         }
+
+     /**
+     * @depends testcalcularComRegrasMaxVMOutIn
+     */
+
+    public function testCombinatorialSplitterApproach() {
+        //http://placements.rede.ufsc.br:8888/?max=3&state={%22cols%22:[{%22label%22:%22VMs%22,%22type%22:%22string%22},{%22label%22:%22p0%22,%22type%22:%22boolean%22},{%22label%22:%22p1%22,%22type%22:%22boolean%22},{%22label%22:%22p2%22,%22type%22:%22boolean%22}],%22rows%22:[{%22c%22:[{%22v%22:%22v0%22},{%22v%22:true},{%22v%22:true},{%22v%22:false}]},{%22c%22:[{%22v%22:%22v1%22},{%22v%22:true},{%22v%22:true},{%22v%22:false}]},{%22c%22:[{%22v%22:%22v2%22},{%22v%22:true},{%22v%22:false},{%22v%22:true}]},{%22c%22:[{%22v%22:%22v3%22},{%22v%22:true},{%22v%22:true},{%22v%22:false}]},{%22c%22:[{%22v%22:%22v4%22},{%22v%22:true},{%22v%22:true},{%22v%22:false}]},{%22c%22:[{%22v%22:%22v5%22},{%22v%22:false},{%22v%22:true},{%22v%22:true}]},{%22c%22:[{%22v%22:%22v6%22},{%22v%22:true},{%22v%22:true},{%22v%22:false}]},{%22c%22:[{%22v%22:%22v7%22},{%22v%22:true},{%22v%22:false},{%22v%22:true}]},{%22c%22:[{%22v%22:%22v8%22},{%22v%22:true},{%22v%22:false},{%22v%22:true}]}]}   
+        $placements = array(
+            array('A:1', 'A:2'), 
+            array('B:1', 'B:2'), 
+            array('C:1', 'C:3'), 
+            array('D:1', 'D:2'),
+            array('E:1', 'E:2'),
+            array('F:2', 'F:3'),
+            array('G:1', 'G:2'),
+            array('H:1', 'H:3'),
+            );
+        $scenario = Scenario::buildScenarioByPlacements($placements);
+        $expect = array(40,2);
+        $result = QuantidadeDeResultados::getSequencialSliceQuantities($scenario,3);
+        $this->assertEquals($expect,$result,"# of quantities !match.");
+    }
+
+     /**
+     * @depends testcalcularComRegrasMaxVMOutIn
+     */
+
+    public function testSequencialSplitterApproach() {
+        //http://placements.rede.ufsc.br:8888/?max=3&state={%22cols%22:[{%22label%22:%22VMs%22,%22type%22:%22string%22},{%22label%22:%22p0%22,%22type%22:%22boolean%22},{%22label%22:%22p1%22,%22type%22:%22boolean%22},{%22label%22:%22p2%22,%22type%22:%22boolean%22}],%22rows%22:[{%22c%22:[{%22v%22:%22v0%22},{%22v%22:true},{%22v%22:true},{%22v%22:false}]},{%22c%22:[{%22v%22:%22v1%22},{%22v%22:true},{%22v%22:true},{%22v%22:false}]},{%22c%22:[{%22v%22:%22v2%22},{%22v%22:true},{%22v%22:false},{%22v%22:true}]},{%22c%22:[{%22v%22:%22v3%22},{%22v%22:true},{%22v%22:true},{%22v%22:false}]},{%22c%22:[{%22v%22:%22v4%22},{%22v%22:true},{%22v%22:true},{%22v%22:false}]},{%22c%22:[{%22v%22:%22v5%22},{%22v%22:false},{%22v%22:true},{%22v%22:true}]},{%22c%22:[{%22v%22:%22v6%22},{%22v%22:true},{%22v%22:true},{%22v%22:false}]},{%22c%22:[{%22v%22:%22v7%22},{%22v%22:true},{%22v%22:false},{%22v%22:true}]},{%22c%22:[{%22v%22:%22v8%22},{%22v%22:true},{%22v%22:false},{%22v%22:true}]}]}   
+        $placements = array(
+            array('A:1', 'A:2'), 
+            array('B:1', 'B:2'), 
+            array('C:1', 'C:3'), 
+            array('D:1', 'D:2'),
+            array('E:1', 'E:2'),
+            array('F:2', 'F:3'),
+            array('G:1', 'G:2'),
+            array('H:1', 'H:3'),
+            );
+        $maxVM = 3;
+        $scenario = Scenario::buildScenarioByPlacements($placements);
+        $expect = array(60,60,40,60,60,40,60,40);
+        $result = QuantidadeDeResultados::getCombinatorialSliceQuantities($scenario,$maxVM);
+        $this->assertEquals(array_sum($expect),array_sum($result),"Sum # of quantities !match.");
+        $this->assertEquals(array_product($expect),array_product($result),"Prod # of quantities !match.");
+
+        $this->assertEquals(52.5,QuantidadeDeResultados::calculateAvgCombSplitterApproach($scenario,$maxVM));
+
+    }
+
+
+
+
 }

@@ -1,5 +1,4 @@
 <?php
-
 require_once "model/Scenario.php";
 
 //Seta APR

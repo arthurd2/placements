@@ -36,7 +36,6 @@ class Combinations
         $result = array();
         
         // concat each array from tmp with each element from $arrays[$i]
-        //$news = array_slice($arrays, $i,1);
         foreach ( $news as $v) {
             list($vmName , $pmName) = explode(':', $v);
             foreach ($tmp as $t) {

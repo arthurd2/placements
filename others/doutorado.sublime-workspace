@@ -152,14 +152,6 @@
 				"buffer_size": 488,
 				"line_ending": "Unix"
 			}
-		},
-		{
-			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/GerarScenariosTest.php",
-			"settings":
-			{
-				"buffer_size": 3550,
-				"line_ending": "Unix"
-			}
 		}
 	],
 	"build_system": "Packages/User/PHPUnit.sublime-build",
@@ -305,12 +297,12 @@
 	],
 	"file_history":
 	[
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/GerarScenariosTest.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Scenario.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/QuantidadeDeResultados.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/CombinacoesTest.php",
 		"/home/arthur/.config/sublime-text-3/Packages/User/getelement.sublime-snippet",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/jquery.query-object.js",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/GerarScenariosTest.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/QuantidadeDeResultadosTest.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/formats.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/TestTimesListener.php",
@@ -490,7 +482,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 7,
+					"stack_index": 6,
 					"type": "text"
 				},
 				{
@@ -520,7 +512,7 @@
 						"translation.y": 969.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 5,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
@@ -549,7 +541,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
+					"stack_index": 5,
 					"type": "text"
 				},
 				{
@@ -593,8 +585,8 @@
 						"selection":
 						[
 							[
-								1057,
-								1057
+								1067,
+								1067
 							]
 						],
 						"settings":
@@ -633,7 +625,7 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": true
 						},
-						"translation.x": -0.0,
+						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
@@ -666,36 +658,6 @@
 						"zoom_level": 1.0
 					},
 					"stack_index": 2,
-					"type": "text"
-				},
-				{
-					"buffer": 7,
-					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/GerarScenariosTest.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3550,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								2128,
-								2128
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 909.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
 					"type": "text"
 				}
 			]

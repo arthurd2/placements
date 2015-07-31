@@ -1,10 +1,10 @@
 <?php
-require_once "../view/formats.php";
-require_once "../src/model/Scenario.php";
-require_once "../src/model/QuantidadeDeResultados.php";
-require_once "../src/model/Combinations.php";
-require_once "../view/Accordion.php";
-require_once "../view/ViewHelper.php";
+require_once "view/formats.php";
+require_once "src/model/Scenario.php";
+require_once "src/model/QuantidadeDeResultados.php";
+require_once "src/model/Combinations.php";
+require_once "view/Accordion.php";
+require_once "view/ViewHelper.php";
 
 ini_set('xdebug.max_nesting_level', 1000);
 $max = isset($_GET['max']) ? $_GET['max'] : 3;
@@ -33,13 +33,16 @@ $sem = QuantidadeDeResultados::calcularSemRegras($scenario);
 $com = QuantidadeDeResultados::calcularComRegras($scenario);
 
 $last = QuantidadeDeResultados::calcularComRegrasMaxVMSub($scenario, $max);
-$test = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($scenario, $max);
+$test1 = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($scenario, $max);
+$test2 = QuantidadeDeResultados::calculateAvgCombSplitterApproach($scenario, $max);
+$test3 = QuantidadeDeResultados::calculateProdSequencialSplitterApproach($scenario, $max);
 
 $filtered = Combinations::GenerateAllCombinationsMaxVM($scenario['placements'], $max);
 $real = count($filtered);
 
-$title = sprintf($fmt_accordion_title, $max, $scenario['nvms'], $sem, $com, $last, $test, $real);
-$body = sprintf($fmt_accordion_body, ViewHelper::printState($filtered));
+$title = sprintf($fmt_accordion_title, $max, $scenario['nvms'],$scenario['npms'], $sem, $com, $real, $last, $test1, $test2,$test3);
+//$body = sprintf($fmt_accordion_body, ViewHelper::printState($filtered));
+$body = '&nbsp';
 $accordion->add($title, $body);
 
 //memcache_set($memcache, 'accordion', $accordion);

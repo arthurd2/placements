@@ -83,7 +83,17 @@ $fmt_charts = '
   </body>
 </html>
 ';
-$fmt_accordion_title = 'MaxVMs:%s VM:%s NoRules:%s RFC:%s | UpperBound1:%s  UpperBound2:%s | Real:%s   ';
+$fmt_accordion_title = 'Info:<br>
+MaxVMs( %s ) VM( %s ) PM( %s )<br>
+NoRules:%s RFC:%s  <br>
+<span style="color:green">Real: %s</span> 
+<br> 
+<br>
+Approaches:<br>
+- Substracting Impossibles: %s  <br>
+- Outsiders & Insiders: %s <br>
+- Avg Combinatorial Slices: %s <br>
+- Prod Sequencial Slices: %s ';
 $fmt_accordion_body = '%s';
 $fmt_genscenario = '
 <button onclick="submit()">Re-calculate Table&Max!</button><br>
