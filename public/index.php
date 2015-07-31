@@ -35,13 +35,16 @@ $com = QuantidadeDeResultados::calcularComRegras($scenario);
 
 $last = QuantidadeDeResultados::calcularComRegrasMaxVMSub($scenario, $max);
 $test1 = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($scenario, $max);
-$test2 = QuantidadeDeResultados::calculateAvgCombSplitterApproach($scenario, $max);
-$test3 = QuantidadeDeResultados::calculateProdSequencialSplitterApproach($scenario, $max);
+$test_c_a = QuantidadeDeResultados::calculateAvgCombSplitterApproach($scenario, $max);
+$test_c_s = QuantidadeDeResultados::calculateSumCombSplitterApproach($scenario, $max);
+$test_s_p = QuantidadeDeResultados::calculateProdSequencialSplitterApproach($scenario, $max);
+$test_s_s = QuantidadeDeResultados::calculateSumSequencialSplitterApproach($scenario, $max);
 
 $filtered = Combinations::GenerateAllCombinationsMaxVM($scenario['placements'], $max);
 $real = count($filtered);
 
-$title = sprintf($fmt_accordion_title, $max, $scenario['nvms'],$scenario['npms'], $sem, $com, $real, $last, $test1, $test2,$test3);
+$title = sprintf($fmt_accordion_title, $max, $scenario['nvms'],$scenario['npms'], $sem, $com, $real, $last, $test1, 
+	$test_c_a,$test_c_s,$test_s_p,$test_s_s);
 //$body = sprintf($fmt_accordion_body, ViewHelper::printState($filtered));
 $body = '&nbsp';
 $accordion->add($title, $body);

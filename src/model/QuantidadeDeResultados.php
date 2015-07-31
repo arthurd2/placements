@@ -146,9 +146,17 @@ class QuantidadeDeResultados
         $quantities = QuantidadeDeResultados::getCombinatorialSliceQuantities($scenario, $maxVM);
         return array_sum($quantities)/count($quantities);
     }
+    static function calculateSumCombSplitterApproach($scenario, $maxVM) {
+        $quantities = QuantidadeDeResultados::getCombinatorialSliceQuantities($scenario, $maxVM);
+        return array_sum($quantities);
+    }
     static function calculateProdSequencialSplitterApproach($scenario, $maxVM) {
         $quantities = QuantidadeDeResultados::getSequencialSliceQuantities($scenario, $maxVM);
         return array_product($quantities);
+    }
+    static function calculateSumSequencialSplitterApproach($scenario, $maxVM) {
+        $quantities = QuantidadeDeResultados::getSequencialSliceQuantities($scenario, $maxVM);
+        return array_sum($quantities);
     }
     static function getSequencialSliceQuantities($scenario, $maxVM) {
         $slice_size = ($maxVM*2) + 1 ;

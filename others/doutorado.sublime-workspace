@@ -4,6 +4,18 @@
 		"selected_items":
 		[
 			[
+				"ma",
+				"maxVM"
+			],
+			[
+				"com",
+				"combination"
+			],
+			[
+				"sl",
+				"slice_size"
+			],
+			[
 				"np",
 				"npm"
 			],
@@ -30,10 +42,6 @@
 			[
 				"si",
 				"size_insider"
-			],
-			[
-				"com",
-				"combinations"
 			],
 			[
 				"sce",
@@ -95,39 +103,20 @@
 			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/todo.todo",
 			"settings":
 			{
-				"buffer_size": 606,
+				"buffer_size": 403,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/formats.php",
+			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/QuantidadeDeResultados.php",
 			"settings":
 			{
-				"buffer_size": 3043,
+				"buffer_size": 7325,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/ViewHelper.php",
-			"settings":
-			{
-				"buffer_size": 507,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/index.php",
-			"settings":
-			{
-				"buffer_size": 1920,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"contents": "<?php\nclass Combinations\n{\n\n    static function generateAllCombinations(&$arrays, $i = 0) {\n        if ($i == count($arrays) - 1) {\n            return $arrays[$i];\n        }\n        \n        // get combinations from subsequent arrays\n        $tmp = Combinations::GenerateAllCombinations($arrays, $i + 1);\n        $result = array();\n        \n        // concat each array from tmp with each element from $arrays[$i]\n        foreach ($arrays[$i] as $v) \n            foreach ($tmp as $t) \n                $result[] = is_array($t) ? array_merge(array($v), $t) : array($v, $t);\n        return $result;\n    }\n\n    static function generateAllCombinationsMaxVM(&$arrays, $max, $i = 0, &$hash_vm = array()) {\n        $slice = array_slice( $arrays, $i , 1 );\n        $news = array_pop( $slice );\n\n        if ($i == count($arrays) - 1) {\n            $resp = array();\n            foreach ($news as $v) {\n                list($vmName , $pmName) = explode(':', $v);\n                $resp[] = array($v,'stat' => array($pmName => 1));\n            }\n            return $resp;\n        }\n        \n        // get combinations from subsequent arrays\n        $tmp = Combinations::GenerateAllCombinationsMaxVM($arrays, $max, $i + 1,$hash_vm);\n        $result = array();\n        \n        // concat each array from tmp with each element from $arrays[$i]\n        foreach ( $news as $v) {\n            list($vmName , $pmName) = explode(':', $v);\n            foreach ($tmp as $t) {\n                if( !isset($t['stat'][$pmName]) or $t['stat'][$pmName] < $max ){\n                    $state = array_merge(array($v), $t) ;\n                    $state['stat'][$pmName] = isset($state['stat'][$pmName])? $state['stat'][$pmName]+1 : 1 ;\n                    $result[] = $state;\n                }\n            }\n        }\n        if($i == 0) \n            foreach ($result as &$value) \n                unset($value['stat']);\n        \n        return $result;\n    }\n\n    static function willOverload($v,$t,$max){\n        if (!is_array($t))\n            return false;\n        list($null , $pmName_new) = explode(':', $v);\n        $count = 1;\n        foreach ($t as $place) {\n            list($null,$pmName) = explode(':', $place);\n            //checar se a performance melhora com um array de counters\n            if ($pmName_new == $pmName)\n                $count++;\n        }\n        return ($count > $max);\n    }\n\n    static function filterCombinationsByMaxVm($combinations, $max) {\n        foreach ($combinations as $key => $combination) {\n            list($v, $p) = Combinations::montaVeP(array($combination));\n            if (Combinations::hasMoreThen($p, $max)) {\n                unset($combinations[$key]);\n            }\n        }\n        return $combinations;\n    }\n    \n    static function montaVeP($matrix) {\n        $resp['vms'] = array();\n        $resp['pms'] = array();\n        foreach ($matrix as $vm_places) {\n            foreach ($vm_places as $place) {\n                list($vmName, $pmName) = explode(':', $place);\n                @$resp['pms'][\"$pmName\"]+= 1;\n                @$resp['vms'][\"$vmName\"]+= 1;\n            }\n        }\n        return array($resp['vms'], $resp['pms']);\n    }\n    static function hasMoreThen($vms,$max){\n        foreach ($vms as $v) if($v > $max) return true;\n        return false;\n    }\n}\n",
 			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Combinations.php",
-			"file_size": 3338,
-			"file_write_time": 130827430214682661,
 			"settings":
 			{
 				"buffer_size": 3292,
@@ -135,21 +124,26 @@
 			}
 		},
 		{
-			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/CombinacoesTest.php",
+			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/QuantidadeDeResultadosTest.php",
 			"settings":
 			{
-				"buffer_size": 1659,
+				"buffer_size": 9430,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"contents": "<?php\nrequire_once \"model/Scenario.php\";\n\n//Seta APR\n$apr = 0.75;\n\n//Seta intervalos de VMs\n$nvms = array(4,5,6,7,8,9);\n\n//Seta intervalos de PMs\n$npms = array(3);\n\n//Gerar Scenarios\n$scenarios = Scenario::geraScenarios($apr,$nvms,$npms);\n\n\n//Converver para JSON\n$json = json_encode($scenarios);\n\n//Criar o nome do Arquivo\n$filename = sprintf(\"Scenarios_APR(%s)_VMs(%s)_PMs(%s).json\", $apr ,implode(',',$nvms),implode(',',$npms));\n\n//Salvar no arquivo\nfile_put_contents($filename, $json);",
-			"file": "1-gerarScenarios.php",
-			"file_size": 489,
-			"file_write_time": 130818846899052271,
+			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/index.php",
 			"settings":
 			{
-				"buffer_size": 488,
+				"buffer_size": 2370,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/formats.php",
+			"settings":
+			{
+				"buffer_size": 3311,
 				"line_ending": "Unix"
 			}
 		}
@@ -297,19 +291,21 @@
 	],
 	"file_history":
 	[
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/formats.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/ViewHelper.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/index.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/CombinacoesTest.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Combinations.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others/1-gerarScenarios.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/GerarScenariosTest.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Scenario.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/QuantidadeDeResultados.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/CombinacoesTest.php",
 		"/home/arthur/.config/sublime-text-3/Packages/User/getelement.sublime-snippet",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/jquery.query-object.js",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/QuantidadeDeResultadosTest.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/formats.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/TestTimesListener.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Combinations.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/TestTimesListener.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/Accordion.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/ViewHelper.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/arruma.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/2-CalculaQuantidades.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others/Constraints2D.gnuplot",
@@ -463,15 +459,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 606,
+						"buffer_size": 403,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								537,
-								537
+								403,
+								403
 							]
 						],
 						"settings":
@@ -482,100 +478,43 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 6,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/formats.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 3043,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								3040,
-								3040
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 969.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 4,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/ViewHelper.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 507,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								507,
-								507
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
 					"stack_index": 5,
 					"type": "text"
 				},
 				{
-					"buffer": 3,
-					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/index.php",
+					"buffer": 1,
+					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/QuantidadeDeResultados.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1920,
+						"buffer_size": 7325,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1908,
-								1908
+								5958,
+								5958
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/PHP/PHP.tmLanguage"
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 382.0,
+						"translation.y": 2319.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 3,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
-					"buffer": 4,
+					"buffer": 2,
 					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Combinations.php",
-					"semi_transient": false,
+					"semi_transient": true,
 					"settings":
 					{
 						"buffer_size": 3292,
@@ -585,38 +524,8 @@
 						"selection":
 						[
 							[
-								1067,
-								1067
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 89.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 5,
-					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/CombinacoesTest.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 1659,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								501,
-								501
+								0,
+								0
 							]
 						],
 						"settings":
@@ -629,24 +538,54 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 1,
+					"stack_index": 4,
 					"type": "text"
 				},
 				{
-					"buffer": 6,
-					"file": "1-gerarScenarios.php",
+					"buffer": 3,
+					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/QuantidadeDeResultadosTest.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 488,
+						"buffer_size": 9430,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6,
-								6
+								7367,
+								7367
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2965.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/index.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2370,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1431,
+								1431
 							]
 						],
 						"settings":
@@ -654,10 +593,40 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 408.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/formats.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 3311,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2898,
+								2898
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 1122.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
 					"type": "text"
 				}
 			]

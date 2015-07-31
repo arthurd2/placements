@@ -93,7 +93,10 @@ Approaches:<br>
 - Substracting Impossibles: %s  <br>
 - Outsiders & Insiders: %s <br>
 - Avg Combinatorial Slices: %s <br>
-- Prod Sequencial Slices: %s ';
+- Sum Combinatorial Slices: %s <br>
+- Prod Sequencial Slices: %s <br>
+- Sum Sequencial Slices: %s <br>
+';
 $fmt_accordion_body = '%s';
 $fmt_genscenario = '
 <button onclick="submit()">Re-calculate Table&Max!</button><br>
