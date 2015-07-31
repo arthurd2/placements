@@ -1,4 +1,5 @@
 <?php
+set_include_path('../');
 require_once "view/formats.php";
 require_once "src/model/Scenario.php";
 require_once "src/model/QuantidadeDeResultados.php";
