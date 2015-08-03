@@ -26,7 +26,7 @@ class Scenario
         		if ($place_allowed){
         			$result["v$vm"][] = "v$vm:p$key";
                     $r_pm["p$key"] = isset($r_pm["p$key"])? $r_pm["p$key"]+1 : 1;
-                    $r_vm["v$vm"] = isset($r_vm["v$vm"])? $r_vm["v$vm"]+1 : 1;;
+                    $r_vm["v$vm"] = isset($r_vm["v$vm"])? $r_vm["v$vm"]+1 : 1;
         		}
         	}
         }

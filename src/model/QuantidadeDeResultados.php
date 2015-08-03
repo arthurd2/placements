@@ -17,7 +17,6 @@ class QuantidadeDeResultados
         $todas = 1;
         foreach ($scenario['rpm'] as $pmName => $vms) {
             $combinacao = QuantidadeDeResultados::calcCombination($vms, $maxVM);
-            //echo "Desejados da PM($pmName): $combinacao\n ";
             $todas *= $combinacao;
         }
         return $todas;
@@ -27,7 +26,6 @@ class QuantidadeDeResultados
         $todas = 0;
         foreach ($scenario['rpm'] as $pmName => $vms) {
             $combinacao = QuantidadeDeResultados::calcCombination($vms, $maxVM);
-            //echo "Desejados da PM($pmName): $combinacao\n ";
             $todas += $combinacao;
         }
         return $todas;
@@ -46,7 +44,6 @@ class QuantidadeDeResultados
                     $pm_tmp+= $tmp;
                 }
             }
-            //echo "Indesejados da PM($pmName): $pm_tmp\n ";
             $indesejado+= $pm_tmp;
         }
         return $todas - $indesejado;
@@ -91,16 +88,13 @@ class QuantidadeDeResultados
             $unwantedLocal = 0;
             if ($numOfVMsInPM > $maxVM) {
                 list($out,$in) = QuantidadeDeResultados::getOutsidersInsiders($pmName,$scenario);
-                //error_log(print_r($in));
                 for ($i = $maxVM+1; $i <= $numOfVMsInPM; $i++) {
                     $in_consolidated = QuantidadeDeResultados::getInsidersCombinations($in, $numOfVMsInPM-$i);
                     $unwantedLocal += $out * $in_consolidated;
                 }
             }
-            //error_log("PM($pmName) - Unwanted($unwantedLocal)<br>");
             $unwanted += $unwantedLocal;
         }
-        //echo "<br>----------------------------<br>";
         return $all - $unwanted;
     }
 
@@ -118,7 +112,6 @@ class QuantidadeDeResultados
                     $pm_tmp+= $tmp;
                 }
             }
-            //echo "Indesejados da PM($pmName): $pm_tmp\n ";
             $indesejado+= $pm_tmp;
         }
         return $todas - $indesejado;
