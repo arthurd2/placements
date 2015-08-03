@@ -19,6 +19,16 @@ class GerarScenariosTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($npms*$apr*$nvms,$total,"Numero final de estados esta errado.");
         $this->assertEquals(array_sum($r_vm),$total,"Numero final de estados diferente do r_vm.");
         $this->assertEquals(array_sum($r_pm),$total,"Numero final de estados diferente do r_pm.");
+    }    
+
+    public function testGeraSenarios() {
+        $nvms = array(5,10);
+        $npms = array(10,20,30);
+        $apr = 0.5;
+
+        $scenarios = Scenario::geraScenarios($apr,$nvms,$npms);
+        $this->assertEquals(count($nvms)*count($npms),count($scenarios),"Numero de VMs esta errado.");
+
     }
     public function testToGoogleTableLines() {
         $scenario['rvm'] = array('A'=>2,'B'=>2,'C'=>2,'D'=>3);
