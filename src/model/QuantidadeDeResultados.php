@@ -193,4 +193,32 @@ class QuantidadeDeResultados
 
         return $quatities;
     }
+
+    static function treeSearchApproach(&$scenario, &$maxVM, &$level = 0 , &$usageVector = array(), &$stateCounter = 0) {
+        // Similar to $scenario['placements'][$level]
+        $key = array_keys($scenario['rvm'])[$level];
+        $vmPlaces = $scenario['placements'][$key];
+
+        //TODO Arrumar casos de VMs sem places!!!
+
+        foreach ( $vmPlaces as $p) {
+            list($vmName , $pmName) = explode(':', $p);
+
+            //Checks if the PM is not full
+            if(!isset($usageVector[$pmName]) || $usageVector[$pmName] < $maxVM){
+                //Check if the last VM to host
+                if( $level >= $scenario['nvms']-1 ){
+                    //Just count one state
+                    $stateCounter++;
+                }else{
+                    $level++;
+                    $usageVector[$pmName] = isset($usageVector[$pmName])? $usageVector[$pmName]+1 : 1;
+                    QuantidadeDeResultados::treeSearchApproach( $scenario, $maxVM, $level , $usageVector, $stateCounter);
+                    $level--;
+                    $usageVector[$pmName]--;
+                }
+            }
+        }
+        return $stateCounter;
+    }
 }

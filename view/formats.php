@@ -86,7 +86,7 @@ $fmt_charts = '
 $fmt_accordion_title = 'Info:<br>
 MaxVMs( %s ) VM( %s ) PM( %s )<br>
 NoRules:%s RFC:%s  <br>
-<span style="color:green">Real: %s</span> 
+<span style="color:green">Real: %s | Tree Search: %s</span> 
 <br> 
 <br>
 Approaches:<br>

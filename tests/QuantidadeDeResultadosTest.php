@@ -215,6 +215,26 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
     }
 
 
+    /**
+     * @depends testgetInsidersCombinations
+     */
 
+    public function testtreeSearchApproach() {
+
+        $placements = array(
+            array('A:1', 'A:2'), 
+            array('B:2', 'B:3'), 
+            array('C:1', 'C:3'), 
+            array('D:1', 'D:2'),
+            array('E:2','E:3'),
+            array('F:2','F:3'),
+            array('G:1','G:3'),
+            array('H:1','H:3'),
+            );
+        $scenario = Scenario::buildScenarioByPlacements($placements);
+        $maxVM = 3;
+        $resp = QuantidadeDeResultados::treeSearchApproach($scenario,$maxVM);
+        $this->assertEquals(80,$resp,"# of approximation !match.");
+        }
 
 }

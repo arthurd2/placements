@@ -54,7 +54,6 @@ class Scenario
     }
 
     static function buildScenarioByPlacements(&$placements) {
-        $scenario['placements'] = $placements;
         $scenario['rpm'] = array();
         $scenario['rvm'] = array();
 
@@ -63,6 +62,7 @@ class Scenario
                 list($nameVM,$namePM) = explode(':', $place);
                 $scenario['rpm'][$namePM] = isset($scenario['rpm'][$namePM])? $scenario['rpm'][$namePM]+1 : 1;
                 $scenario['rvm'][$nameVM] = isset($scenario['rvm'][$nameVM])? $scenario['rvm'][$nameVM]+1 : 1;
+                $scenario['placements'][$nameVM][] = "$nameVM:$namePM";
             }
         }
         $scenario['nvms'] = count($scenario['rvm']);

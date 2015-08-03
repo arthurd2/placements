@@ -34,6 +34,7 @@ $sem = QuantidadeDeResultados::calcularSemRegras($scenario);
 $com = QuantidadeDeResultados::calcularComRegras($scenario);
 
 $last = QuantidadeDeResultados::calcularComRegrasMaxVMSub($scenario, $max);
+$tree = QuantidadeDeResultados::treeSearchApproach($scenario,$max);
 $test1 = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($scenario, $max);
 $test_c_a = QuantidadeDeResultados::calculateAvgCombSplitterApproach($scenario, $max);
 $test_c_s = QuantidadeDeResultados::calculateSumCombSplitterApproach($scenario, $max);
@@ -43,7 +44,7 @@ $test_s_s = QuantidadeDeResultados::calculateSumSequencialSplitterApproach($scen
 $filtered = Combinations::GenerateAllCombinationsMaxVM($scenario['placements'], $max);
 $real = count($filtered);
 
-$title = sprintf($fmt_accordion_title, $max, $scenario['nvms'],$scenario['npms'], $sem, $com, $real, $last, $test1, 
+$title = sprintf($fmt_accordion_title, $max, $scenario['nvms'],$scenario['npms'], $sem, $com, $real, $tree, $last, $test1, 
 	$test_c_a,$test_c_s,$test_s_p,$test_s_s);
 //$body = sprintf($fmt_accordion_body, ViewHelper::printState($filtered));
 $body = '&nbsp';

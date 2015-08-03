@@ -62,11 +62,12 @@ data.addColumn('boolean', '3');\n";
             );
         
         $scenario = Scenario::buildScenarioByPlacements($placements);
-        $this->assertEquals($placements,$scenario['placements'],'Placements not equal');
         $this->assertEquals(count($rvm),$scenario['nvms'],'Number of VM are not the same');
         $this->assertEquals(count($rpm),$scenario['npms'],'Number of PM are not the same');
         $this->assertEquals($rvm,$scenario['rvm'],'VM report is not the same');
         $this->assertEquals($rpm,$scenario['rpm'],'PM report is not the same');
+        $this->assertEquals(array_keys($rvm),array_keys($scenario['placements']),'Placements not equal');
+        $this->assertEquals(array_values($placements),array_values($scenario['placements']),'Placements not equal');
     }
 
 
