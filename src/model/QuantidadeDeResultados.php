@@ -37,14 +37,14 @@ class QuantidadeDeResultados
 
         $todas = array_product($scenario['rvm']);
         foreach ($scenario['rpm'] as $pmName => $pm) {
-            $pm_tmp = 0;
+            $localUnwanted = 0;
             if ($pm > $maxVM) {
                 for ($i = $maxVM + 1; $i <= $pm; $i++) {
                     $tmp = QuantidadeDeResultados::calcCombination($pm, $i);
-                    $pm_tmp+= $tmp;
+                    $localUnwanted+= $tmp;
                 }
             }
-            $indesejado+= $pm_tmp;
+            $indesejado+= $localUnwanted;
         }
         return $todas - $indesejado;
     }
@@ -65,7 +65,7 @@ class QuantidadeDeResultados
         foreach ($scenario['placements'] as $vm => $places) {
             $flag = true;
             foreach ($places as $place) {
-                list($vm_name,$pm_name) = explode(':', $place);
+                $pm_name = explode(':', $place)[1];
                 //If the current VM can be host in the evaluated PM, do not multiply
                 if($pm == $pm_name){
                     $flag = false;
@@ -89,8 +89,8 @@ class QuantidadeDeResultados
             if ($numOfVMsInPM > $maxVM) {
                 list($out,$in) = QuantidadeDeResultados::getOutsidersInsiders($pmName,$scenario);
                 for ($i = $maxVM+1; $i <= $numOfVMsInPM; $i++) {
-                    $in_consolidated = QuantidadeDeResultados::getInsidersCombinations($in, $numOfVMsInPM-$i);
-                    $unwantedLocal += $out * $in_consolidated;
+                    $inConsolidated = QuantidadeDeResultados::getInsidersCombinations($in, $numOfVMsInPM-$i);
+                    $unwantedLocal += $out * $inConsolidated;
                 }
             }
             $unwanted += $unwantedLocal;
@@ -104,15 +104,15 @@ class QuantidadeDeResultados
 
         $todas = array_product($scenario['rvm']);
         foreach ($scenario['rpm'] as $pmName => $pm) {
-            $pm_tmp = 0;
+            $localUnwanted = 0;
             if ($pm > $maxVM) {
-                list($multi,$null) = QuantidadeDeResultados::getOutsidersInsiders($pmName,$scenario);
+                $multi = QuantidadeDeResultados::getOutsidersInsiders($pmName,$scenario)[0];
                 for ($i = $maxVM+1; $i <= $pm; $i++) {
                     $tmp = QuantidadeDeResultados::calcCombination($pm, $i)*$multi;
-                    $pm_tmp+= $tmp;
+                    $localUnwanted += $tmp;
                 }
             }
-            $indesejado+= $pm_tmp;
+            $indesejado += $localUnwanted;
         }
         return $todas - $indesejado;
     }
@@ -168,10 +168,10 @@ class QuantidadeDeResultados
     static function getCombinatorialSliceQuantities($scenario, $maxVM) {
         require_once 'libs/Combinatorics.php';
         $combinatorics = new Math_Combinatorics;
-        $slice_size = ($maxVM*2) + 1 ;
+        $sliceSize = ($maxVM*2) + 1 ;
 
         $input = array_keys($scenario['placements']);
-        $combinations = $combinatorics->combinations($input, $slice_size); // 5 is the subset size
+        $combinations = $combinatorics->combinations($input, $sliceSize);
 
         $quatities = array();
 
@@ -180,8 +180,8 @@ class QuantidadeDeResultados
             foreach ($combination as $index) {
                 $slice[] = $scenario['placements'][$index];
             }
-            $slice_scenario = Scenario::buildScenarioByPlacements($slice);
-            $quatities[] = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($slice_scenario,$maxVM);
+            $sliceScenario = Scenario::buildScenarioByPlacements($slice);
+            $quatities[] = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($sliceScenario,$maxVM);
         }
 
         return $quatities;
@@ -195,7 +195,7 @@ class QuantidadeDeResultados
 
         //Interects foreach possible placements of that VM
         foreach ( $vmPlaces as $p) {
-            list($vmName , $pmName) = explode(':', $p);
+            $pmName = explode(':', $p)[1];
 
             //Checks if the PM is not full
             if(!isset($usageVector[$pmName]) || $usageVector[$pmName] < $maxVM){

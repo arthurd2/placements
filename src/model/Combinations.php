@@ -25,7 +25,7 @@ class Combinations
         if ($i == count($arrays) - 1) {
             $resp = array();
             foreach ($news as $v) {
-                list($vmName , $pmName) = explode(':', $v);
+                $pmName = explode(':', $v)[1];
                 $resp[] = array($v,'stat' => array($pmName => 1));
             }
             return $resp;
@@ -56,12 +56,12 @@ class Combinations
     static function willOverload($v,$t,$max){
         if (!is_array($t))
             return false;
-        list($null , $pmName_new) = explode(':', $v);
+        $pmNameNew = explode(':', $v)[1];
         $count = 1;
         foreach ($t as $place) {
             $pmName = explode(':', $place)[1];
             //checar se a performance melhora com um array de counters
-            if ($pmName_new == $pmName)
+            if ($pmNameNew == $pmName)
                 $count++;
         }
         return ($count > $max);

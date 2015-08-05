@@ -139,53 +139,53 @@ class Scenario
             $virtualMachines = array();
             $virtualMachines = $vmware->findAllManagedObjects('VirtualMachine', array('name', 'network', 'datastore'));
             foreach ($virtualMachines as $vm) {
-                $new_vm['name'] = $vm->name;
+                $newVM['name'] = $vm->name;
                 
-                //$new_vm->cpus = $vm->summary->config->numCpu;
-                $new_vm['memory'] = $vm->config->hardware->memoryMB;
+                //$newVM->cpus = $vm->summary->config->numCpu
+                $newVM['memory'] = $vm->config->hardware->memoryMB;
                 
-                //$new_vm->annotation = $vm->config->annotation;
-                $new_vm['uuid'] = $vm->config->uuid;
+                //$newVM->annotation = $vm->config->annotation
+                $newVM['uuid'] = $vm->config->uuid;
                 
-                $new_vm['networks'] = array();
+                $newVM['networks'] = array();
                 foreach ($vm->network as $network) 
-                    $new_vm['networks'][] = $network->name;
+                    $newVM['networks'][] = $network->name;
                 
-                $new_vm['datastores'] = array();
+                $newVM['datastores'] = array();
                 foreach ($vm->datastore as $datastore) 
-                    $new_vm['datastores'][] = $datastore->info->name;
+                    $newVM['datastores'][] = $datastore->info->name;
                 
                 /*
-                .$new_vm->disco = 0;
-                .$devs = $vm->config->hardware->device;
-                .foreach ($devs as $dev) {
-                .    if (isset($dev->capacityInKB)) $new_vm->disco+= ($dev->capacityInKB / (1024 * 1024));
-                .}
+                $newVM->disco = 0
+                $devs = $vm->config->hardware->device
+                foreach ($devs as $dev) {
+                    if (isset($dev->capacityInKB)) $newVM->disco+= ($dev->capacityInKB / (1024 * 1024))
+                }
                 */
-                $vms[$new_vm['uuid']] = $new_vm;
+                $vms[$newVM['uuid']] = $newVM;
             }
             $cache->set('vms', $vms, false, 259200);
         }
         $pms = $cache->get('pms');
-        if ($pms == false) {
+        if (!$pms) {
             //'name', 'network', 'datastore', 'hardware'
             $physicalMachines = $vmware->findAllManagedObjects('HostSystem', array('name'));
             
             foreach ($physicalMachines as $pm) {
-                $new_pm['name'] = $pm->name;
-                
-                //$new_pm['uuid'] = $pm->config->uuid;
-                $new_pm['networks'] = array();
+                $newPM = array();
+                $newPM['name'] = $pm->name;
+                //$newPM['uuid'] = $pm->config->uuid
+                $newPM['networks'] = array();
                 foreach ($pm->network as $network) {
-                    $new_pm['networks'][] = $network->name;
+                    $newPM['networks'][] = $network->name;
                 }
-                $new_pm['datastores'] = array();
+                $newPM['datastores'] = array();
                 foreach ($pm->datastore as $datastore) {
-                    $new_pm['datastores'][] = $datastore->info->name;
+                    $newPM['datastores'][] = $datastore->info->name;
                 }
-                $new_pm['memory'] = intval($pm->hardware->memorySize / (1024 * 1024));
-                die(print_r($new_pm, true));
-                $pms[$new_pm['name']] = $new_vm;
+                $newPM['memory'] = intval($pm->hardware->memorySize / (1024 * 1024));
+                
+                $pms[$newPM['name']] = $newPM;
             }
             $cache->set('pms', $pms, false, 259200);
         }
