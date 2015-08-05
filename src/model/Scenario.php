@@ -5,32 +5,35 @@ class Scenario
     public $nvms;
     public $npms;
     public $scenario;
-
-    private function __construct(){}
-
-    static function  geraPlacements( $apr,  $nvm,  $npm) {
+    
+    private function __construct() {
+    }
+    
+    static function geraPlacements($apr, $nvm, $npm) {
         
-        //Bloco que gera um array com a distribuição inicial de Placements 
+        //Bloco que gera um array com a distribuição inicial de Placements
         //igual a $apr - Ex. 0.75 e 100PM geram 75 placements possiveis
         $numPlacements = floor($npm * $apr);
         $allow = array_fill(0, $numPlacements, true);
         $denied = array_fill($numPlacements, $npm - $numPlacements, false);
         $places = array_merge($allow, $denied);
-        $r_pm = array();
-        $r_vm = array();
+        $rPM = array();
+        $rVM = array();
         $result = array();
-
+        
         foreach (range(0, $nvm - 1) as $vm) {
-        	shuffle($places);
-        	foreach ($places as $key => $place_allowed) {
-        		if ($place_allowed){
-        			$result["v$vm"][] = "v$vm:p$key";
-                    $r_pm["p$key"] = isset($r_pm["p$key"])? $r_pm["p$key"]+1 : 1;
-                    $r_vm["v$vm"] = isset($r_vm["v$vm"])? $r_vm["v$vm"]+1 : 1;
-        		}
-        	}
+            shuffle($places);
+            foreach ($places as $key => $place_allowed) {
+                if ($place_allowed) {
+                    $nvm = "v$vm";
+                    $npm = "p$key";
+                    $result[$nvm][] = "$nvm:$npm";
+                    $rPM[$npm] = isset($rPM[$npm]) ? $rPM[$npm] + 1 : 1;
+                    $rVM[$nvm] = isset($rVM[$nvm]) ? $rVM[$nvm] + 1 : 1;
+                }
+            }
         }
-        return array($result,$r_vm,$r_pm);
+        return array($result, $rVM, $rPM);
     }
     
     static function geraScenarios($apr, $nvms, $npms) {
@@ -43,8 +46,10 @@ class Scenario
                 $scenario['npms'] = $npm;
                 list($places, $r_vm, $r_pm) = Scenario::geraPlacements($apr, $nvm, $npm);
                 $scenario['placements'] = $places;
+                
                 //Resumo: array cuja key é o nome da VM e o valor é o numero de placements possiveis que ela pode estas
                 $scenario['rvm'] = $r_vm;
+                
                 //Resumo: array cuja key é o nome da PM e o valor é o numero de VM que ela teoricamente pode hospedar
                 $scenario['rpm'] = $r_pm;
                 $retorno["r-$apr,v-$nvm,p-$npm"] = $scenario;
@@ -52,16 +57,16 @@ class Scenario
         }
         return $retorno;
     }
-
+    
     static function buildScenarioByPlacements(&$placements) {
         $scenario['rpm'] = array();
         $scenario['rvm'] = array();
-
+        
         foreach ($placements as $vms) {
             foreach ($vms as $place) {
-                list($nameVM,$namePM) = explode(':', $place);
-                $scenario['rpm'][$namePM] = isset($scenario['rpm'][$namePM])? $scenario['rpm'][$namePM]+1 : 1;
-                $scenario['rvm'][$nameVM] = isset($scenario['rvm'][$nameVM])? $scenario['rvm'][$nameVM]+1 : 1;
+                list($nameVM, $namePM) = explode(':', $place);
+                $scenario['rpm'][$namePM] = isset($scenario['rpm'][$namePM]) ? $scenario['rpm'][$namePM] + 1 : 1;
+                $scenario['rvm'][$nameVM] = isset($scenario['rvm'][$nameVM]) ? $scenario['rvm'][$nameVM] + 1 : 1;
                 $scenario['placements'][$nameVM][] = "$nameVM:$namePM";
             }
         }
@@ -69,66 +74,36 @@ class Scenario
         $scenario['npms'] = count($scenario['rpm']);
         return $scenario;
     }
-
-    static function getFilledArrayWithTrue($placements){
+    
+    static function getFilledArrayWithTrue($placements) {
         $resp = array();
-        foreach ($placements as $vm => $places) 
-            foreach ($places as $place) {
-                list($nvm,$npm) = explode(':', $place);
-                $resp[$nvm][$npm] = true;
-            }
-        return $resp;
-    }
-
-    static function toGoogleTableLines($scenario){ //TODO deprecated
-        $places = Scenario::getFilledArrayWithTrue($scenario['placements']);
-        $vms = array_keys($scenario['rvm']);
-        $pms = array_keys($scenario['rpm']);
-        ksort($pms);
-        ksort($vms);
-        $resp = array();
-
-        foreach ($vms as $v) {
-            $line = array("'$v'");
-            foreach ($pms as $p) 
-                $line[] = isset($places[$v][$p])? 'true' : 'false';
-            $resp[] = sprintf('[%s]',implode(',', $line));
-        }
-        return "data.addRows([\n".implode(",\n", $resp)."\n]);";
-    }
-    static function toGoogleTableHeader($scenario){ //TODO deprecated
-        $resp = "data.addColumn('string', 'Name');\n";
-        $fmt = "data.addColumn('boolean', '%s');\n";
-        $pms = array_keys($scenario['rpm']);
-        ksort($pms);
-        foreach ($pms as $value) {
-            $resp .= sprintf($fmt,$value);
+        foreach ($placements as $vm => $places) foreach ($places as $place) {
+            list($nvm, $npm) = explode(':', $place);
+            $resp[$nvm][$npm] = true;
         }
         return $resp;
     }
-
-    static function toDataTableJSON($scenario){
+    
+    static function toDataTableJSON($scenario) {
         $resp = array();
         $pms = array_keys($scenario['rpm']);
         $vms = array_keys($scenario['rvm']);
         $places = Scenario::getFilledArrayWithTrue($scenario['placements']);
-        $resp['cols'][] = array('label'=>'VMs','type'=>'string');
-
+        $resp['cols'][] = array('label' => 'VMs', 'type' => 'string');
+        
         foreach ($pms as $pmName) {
-            $resp['cols'][] = array('label'=>$pmName,'type'=>'boolean');
+            $resp['cols'][] = array('label' => $pmName, 'type' => 'boolean');
         }
         foreach ($vms as $v) {
             $rows = array();
-            $rows[] = array( 'v' => $v );
-            foreach ($pms as $p) 
-                $rows[] = array( 'v' => isset($places[$v][$p])? true : false );
-            $resp['rows'][] = array( 'c' => $rows );
+            $rows[] = array('v' => $v);
+            foreach ($pms as $p) $rows[] = array('v' => isset($places[$v][$p]));
+            $resp['rows'][] = array('c' => $rows);
         }
         return json_encode($resp);
     }
-    static function getScenarioFromJSON($json){
-        $table = json_decode($json,true);
-        $resp = array();
+    static function getScenarioFromJSON($json) {
+        $table = json_decode($json, true);
         unset($table['cols'][0]);
         foreach ($table['cols'] as $k => $v) {
             $pms[] = $v['label'];
@@ -138,13 +113,82 @@ class Scenario
             $tmp = array_shift($row['c']);
             $vm = $tmp['v'];
             foreach ($row['c'] as $k => $c) {
-                if($c['v'] == 1){
+                if ($c['v'] == 1) {
                     $pm = $pms[$k];
                     $placements[$r][] = "$vm:$pm";
                 }
             }
         }
-
+        
         return Scenario::buildScenarioByPlacements($placements);
+    }
+    
+    static function getScenarioFromVMWare() {
+    }
+    
+    static function loadVMWareTree() {
+        //https://www.vmware.com/support/developer/vc-sdk/visdk41pubs/ApiReference/vim.VirtualMachine.html
+        //http://pubs.vmware.com/vsphere-60/index.jsp?topic=/com.vmware.wssdk.apiref.doc/index.html&single=true&__utma=207178772.1811249502.1438681066.1438681066.1438681066.1&__utmb=207178772.0.10.1438681066&__utmc=207178772&__utmx=-&__utmz=207178772.1438681066.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)&__utmv=-&__utmk=104578819
+        require_once "libs/vmwarephp/Bootstrap.php";
+
+        $cache = memcache_connect('localhost', 11211);
+        $vmware = new \Vmwarephp\Vhost(getenv('VMHOST'), getenv('VMUSER'), getenv('VMPASS'));
+        $vms = $cache->get('vms');
+        if ($vms == false) { 
+            //'name', 'summary','network','datastore', 'config'
+            $virtualMachines = array();
+            $virtualMachines = $vmware->findAllManagedObjects('VirtualMachine', array('name', 'network', 'datastore'));
+            foreach ($virtualMachines as $vm) {
+                $new_vm['name'] = $vm->name;
+                
+                //$new_vm->cpus = $vm->summary->config->numCpu;
+                $new_vm['memory'] = $vm->config->hardware->memoryMB;
+                
+                //$new_vm->annotation = $vm->config->annotation;
+                $new_vm['uuid'] = $vm->config->uuid;
+                
+                $new_vm['networks'] = array();
+                foreach ($vm->network as $network) 
+                    $new_vm['networks'][] = $network->name;
+                
+                $new_vm['datastores'] = array();
+                foreach ($vm->datastore as $datastore) 
+                    $new_vm['datastores'][] = $datastore->info->name;
+                
+                /*
+                .$new_vm->disco = 0;
+                .$devs = $vm->config->hardware->device;
+                .foreach ($devs as $dev) {
+                .    if (isset($dev->capacityInKB)) $new_vm->disco+= ($dev->capacityInKB / (1024 * 1024));
+                .}
+                */
+                $vms[$new_vm['uuid']] = $new_vm;
+            }
+            $cache->set('vms', $vms, false, 259200);
+        }
+        $pms = $cache->get('pms');
+        if ($pms == false) {
+            //'name', 'network', 'datastore', 'hardware'
+            $physicalMachines = $vmware->findAllManagedObjects('HostSystem', array('name'));
+            
+            foreach ($physicalMachines as $pm) {
+                $new_pm['name'] = $pm->name;
+                
+                //$new_pm['uuid'] = $pm->config->uuid;
+                $new_pm['networks'] = array();
+                foreach ($pm->network as $network) {
+                    $new_pm['networks'][] = $network->name;
+                }
+                $new_pm['datastores'] = array();
+                foreach ($pm->datastore as $datastore) {
+                    $new_pm['datastores'][] = $datastore->info->name;
+                }
+                $new_pm['memory'] = intval($pm->hardware->memorySize / (1024 * 1024));
+                die(print_r($new_pm, true));
+                $pms[$new_pm['name']] = $new_vm;
+            }
+            $cache->set('pms', $pms, false, 259200);
+        }
+        return array('vms'=>$vms,'pms'=>$pms);
     }
 }

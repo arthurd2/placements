@@ -1,15 +1,22 @@
 <phpunit  colors="true">
- <listeners>
-  <listener class="PHPUnitTestListener" file="tests/TestTimesListener.php" />
- </listeners>
+
+  <listeners>
+    <listener class="PHPUnitTestListener" file="tests/TestTimesListener.php" />
+  </listeners>
+
+  <php>
+    <env name="ENV_PHPUNIT_TEST" value="value" />
+  </php>
 
   <testsuites>
     <testsuite name="Test 01">
       <directory>tests</directory>
     </testsuite>
   </testsuites>
-	<logging>
-		<log type="coverage-clover" target="coverage.xml" />
-        	<log type="junit" target="junit.xml" />
-    	</logging>
+
+  <logging>
+    <log type="coverage-clover" target="coverage.xml" />
+    <log type="junit"           target="junit.xml" />
+  </logging>
+
 </phpunit>

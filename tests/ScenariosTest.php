@@ -28,38 +28,7 @@ class GerarScenariosTest extends PHPUnit_Framework_TestCase
 
         $scenarios = Scenario::geraScenarios($apr,$nvms,$npms);
         $this->assertEquals(count($nvms)*count($npms),count($scenarios),"Numero de VMs esta errado.");
-
     }
-    public function testToGoogleTableLines() {
-        $scenario['rvm'] = array('A'=>2,'B'=>2,'C'=>2,'D'=>3);
-        $scenario['rpm'] = array('1'=>2,'2'=>4,'3'=>3);
-        $scenario['placements'] = array(
-            array('A:2', 'A:3'), 
-            array('B:1', 'B:2'), 
-            array('C:2', 'C:3'), 
-            array('D:1', 'D:2', 'D:3'));
-        $expect = 
-"data.addRows([
-['A',false,true,true],
-['B',true,true,false],
-['C',false,true,true],
-['D',true,true,true]
-]);";
-
-        $resp = Scenario::toGoogleTableLines($scenario);
-        $this->assertEquals($expect,$resp);
-    }
-    public function testToGoogleTableHeader() {
-        $expect=
-"data.addColumn('string', 'Name');
-data.addColumn('boolean', '1');
-data.addColumn('boolean', '2');
-data.addColumn('boolean', '3');\n";
-        $scenario['rpm'] = array('1'=>2,'2'=>4,'3'=>3);
-        $resp = Scenario::toGoogleTableHeader($scenario);
-        $this->assertEquals($expect,$resp);
-    }
-
 
     public function testbuildScenarioByPlacements(){
         $rvm = array('A'=>2,'B'=>2,'C'=>2,'D'=>3);
@@ -106,5 +75,15 @@ data.addColumn('boolean', '3');\n";
             $this->assertEquals($value,$scenario2['rpm'][$key],"# of placements of $key !match");
  
     }
+    /**
+     * @depends testQueNaoExiste
+     */
+    public function testloadVMWareTree(){
+        list($vms,$pms) = Scenario::loadVMWareTree();
+        $this->assertGreaterThan(0,count($vms),'VMs not set');
+        $this->assertGreaterThan(0,count($pms),'PMs not set');
+    }
+
+
 
 }

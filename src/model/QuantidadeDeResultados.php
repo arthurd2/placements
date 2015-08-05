@@ -187,13 +187,13 @@ class QuantidadeDeResultados
         return $quatities;
     }
 
+    //TODO Arrumar casos de VMs sem places!!!
     static function treeSearchApproach(&$scenario, &$maxVM, &$level = 0 , &$usageVector = array(), &$stateCounter = 0) {
-        // Similar to $scenario['placements'][$level]
+        //// Select the array of placements of VM => $level
         $key = array_keys($scenario['rvm'])[$level];
         $vmPlaces = $scenario['placements'][$key];
 
-        //TODO Arrumar casos de VMs sem places!!!
-
+        //Interects foreach possible placements of that VM
         foreach ( $vmPlaces as $p) {
             list($vmName , $pmName) = explode(':', $p);
 
@@ -204,6 +204,7 @@ class QuantidadeDeResultados
                     //Just count one state
                     $stateCounter++;
                 }else{
+                    //Prepare to drilldown
                     $level++;
                     $usageVector[$pmName] = isset($usageVector[$pmName])? $usageVector[$pmName]+1 : 1;
                     QuantidadeDeResultados::treeSearchApproach( $scenario, $maxVM, $level , $usageVector, $stateCounter);

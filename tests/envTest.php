@@ -8,8 +8,6 @@ class envTests extends PHPUnit_Framework_TestCase {
 
 		foreach ($neededEnvVars as $value) {
 			$this->assertFalse(empty(getenv($value)),"Env Var '$value' is not set.");
-		}
-		
+		}	
 	}
-
 }
