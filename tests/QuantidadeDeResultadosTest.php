@@ -1,15 +1,15 @@
 <?php
-require_once "src/model/QuantidadeDeResultados.php";
+require_once "src/model/Approximation.php";
 require_once "src/model/Scenario.php";
 
-class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
+class ApproximationTest extends PHPUnit_Framework_TestCase
 {
     
     public function testScenarioSemRegras() {
         $scenario['nvms'] = 10;
         $scenario['npms'] = 10;
         
-        $resp = QuantidadeDeResultados::calcularSemRegras($scenario);
+        $resp = Approximation::calcularSemRegras($scenario);
         $this->assertEquals($resp, pow(10, 10), "Numero de VMs esta errado.");
     }
     
@@ -21,12 +21,12 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
             array('C:2', 'C:3'), 
             array('D:1', 'D:2', 'D:3'));
         $scenario = Scenario::buildScenarioByPlacements($placements);
-        $resp = QuantidadeDeResultados::calcularComRegras($scenario);
+        $resp = Approximation::calcularComRegras($scenario);
         $this->assertEquals(24,$resp);
     }
 
     public function testFact() {
-        $resp = QuantidadeDeResultados::fact(5);
+        $resp = Approximation::fact(5);
         $this->assertEquals(120,$resp);
        
     }
@@ -34,9 +34,9 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
      * @depends testFact
      */
     public function testCombinacao() {
-        $resp = QuantidadeDeResultados::calcCombination(52,5);
+        $resp = Approximation::calcCombination(52,5);
         $this->assertEquals(2598960,$resp);
-        $resp = QuantidadeDeResultados::calcCombination(16,3);
+        $resp = Approximation::calcCombination(16,3);
         $this->assertEquals(560,$resp);
     }
 
@@ -57,7 +57,7 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
             array('C:2', 'C:3'), 
             array('D:1', 'D:2', 'D:3'));
         $scenario = Scenario::buildScenarioByPlacements($placements);
-        $resp = QuantidadeDeResultados::calcularComRegrasMaxVMSub($scenario,3);
+        $resp = Approximation::calcularComRegrasMaxVMSub($scenario,3);
         $this->assertEquals(23,$resp);
     }
     /**
@@ -70,7 +70,7 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
             array('C:2', 'C:3'), 
             array('D:1', 'D:2', 'D:3'));
         $scenario = Scenario::buildScenarioByPlacements($placements);
-        $resp = QuantidadeDeResultados::calcularComRegrasMaxVMProd($scenario,2);
+        $resp = Approximation::calcularComRegrasMaxVMProd($scenario,2);
         $this->assertEquals(18,$resp);
     }
     /**
@@ -83,7 +83,7 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
             array('C:2', 'C:3'), 
             array('D:1', 'D:2', 'D:3'));
         $scenario = Scenario::buildScenarioByPlacements($placements);
-        $resp = QuantidadeDeResultados::calcularComRegrasMaxVMSum($scenario,2);
+        $resp = Approximation::calcularComRegrasMaxVMSum($scenario,2);
         $this->assertEquals(10,$resp);
     }
 
@@ -100,7 +100,7 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
             array('F:2', 'F:3'),
             );
         $scenario = Scenario::buildScenarioByPlacements($placements);
-        $resp = QuantidadeDeResultados::calcularComRegrasMaxVMSubProdOthers($scenario,3);
+        $resp = Approximation::calcularComRegrasMaxVMSubProdOthers($scenario,3);
         $this->assertEquals(48,$resp);
     }
 
@@ -122,7 +122,7 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
         $scenario = Scenario::buildScenarioByPlacements($placements);
 
         $exp_insiders = array(2,1,0,2,3);
-        list($out,$in) = QuantidadeDeResultados::getOutsidersInsiders('3',$scenario);
+        list($out,$in) = Approximation::getOutsidersInsiders('3',$scenario);
         $this->assertEquals(4,$out,"# of Outsiders !match.");
         $this->assertEquals(array_sum($exp_insiders),array_sum($in),"Sum of Insiders !match");
         $this->assertEquals(array_product($exp_insiders),array_product($in),"Prod of Insiders !match");
@@ -134,13 +134,13 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
     public function testgetInsidersCombinations() {
 
         $insiders = array(2,1,0,2,3);
-        $this->assertEquals(1,QuantidadeDeResultados::getInsidersCombinations($insiders,0));
-        $this->assertEquals(8,QuantidadeDeResultados::getInsidersCombinations($insiders,1));
-        $this->assertEquals(23,QuantidadeDeResultados::getInsidersCombinations($insiders,2));
-        $this->assertEquals(28,QuantidadeDeResultados::getInsidersCombinations($insiders,3));
+        $this->assertEquals(1,Approximation::getInsidersCombinations($insiders,0));
+        $this->assertEquals(8,Approximation::getInsidersCombinations($insiders,1));
+        $this->assertEquals(23,Approximation::getInsidersCombinations($insiders,2));
+        $this->assertEquals(28,Approximation::getInsidersCombinations($insiders,3));
         $insiders = array(2,1,2,1,1,1);
-        $this->assertEquals(44,QuantidadeDeResultados::getInsidersCombinations($insiders,3));
-        //$this->assertEquals(array(),QuantidadeDeResultados::_getInsidersCombinations($insiders,2));
+        $this->assertEquals(44,Approximation::getInsidersCombinations($insiders,3));
+        //$this->assertEquals(array(),Approximation::_getInsidersCombinations($insiders,2));
     }
 
     /**
@@ -161,7 +161,7 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
             );
         $scenario = Scenario::buildScenarioByPlacements($placements);
 
-        $resp = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($scenario,3);
+        $resp = Approximation::calcularComRegrasMaxVMOutIn($scenario,3);
         $this->assertEquals(72,$resp,"# of approximation !match.");
         }
 
@@ -183,7 +183,7 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
             );
         $scenario = Scenario::buildScenarioByPlacements($placements);
         $expect = array(40,2);
-        $result = QuantidadeDeResultados::getSequencialSliceQuantities($scenario,3);
+        $result = Approximation::getSequencialSliceQuantities($scenario,3);
         $this->assertEquals($expect,$result,"# of quantities !match.");
     }
 
@@ -206,11 +206,11 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
         $maxVM = 3;
         $scenario = Scenario::buildScenarioByPlacements($placements);
         $expect = array(60,60,40,60,60,40,60,40);
-        $result = QuantidadeDeResultados::getCombinatorialSliceQuantities($scenario,$maxVM);
+        $result = Approximation::getCombinatorialSliceQuantities($scenario,$maxVM);
         $this->assertEquals(array_sum($expect),array_sum($result),"Sum # of quantities !match.");
         $this->assertEquals(array_product($expect),array_product($result),"Prod # of quantities !match.");
 
-        $this->assertEquals(52.5,QuantidadeDeResultados::calculateAvgCombSplitterApproach($scenario,$maxVM));
+        $this->assertEquals(52.5,Approximation::calculateAvgCombSplitterApproach($scenario,$maxVM));
 
     }
 
@@ -233,7 +233,7 @@ class QuantidadeDeResultadosTest extends PHPUnit_Framework_TestCase
             );
         $scenario = Scenario::buildScenarioByPlacements($placements);
         $maxVM = 3;
-        $resp = QuantidadeDeResultados::treeSearchApproach($scenario,$maxVM);
+        $resp = Approximation::treeSearchApproach($scenario,$maxVM);
         $this->assertEquals(80,$resp,"# of approximation !match.");
         }
 

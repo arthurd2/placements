@@ -1,5 +1,5 @@
 <?php
-class QuantidadeDeResultados
+class Approximation
 {
     static function calcularSemRegras($scenario) {
         return pow($scenario['npms'], $scenario['nvms']);
@@ -16,7 +16,7 @@ class QuantidadeDeResultados
     static function calcularComRegrasMaxVMProd($scenario, $maxVM) {
         $todas = 1;
         foreach ($scenario['rpm'] as $pmName => $vms) {
-            $combinacao = QuantidadeDeResultados::calcCombination($vms, $maxVM);
+            $combinacao = Approximation::calcCombination($vms, $maxVM);
             $todas *= $combinacao;
         }
         return $todas;
@@ -25,7 +25,7 @@ class QuantidadeDeResultados
     static function calcularComRegrasMaxVMSum($scenario, $maxVM) {
         $todas = 0;
         foreach ($scenario['rpm'] as $pmName => $vms) {
-            $combinacao = QuantidadeDeResultados::calcCombination($vms, $maxVM);
+            $combinacao = Approximation::calcCombination($vms, $maxVM);
             $todas += $combinacao;
         }
         return $todas;
@@ -40,7 +40,7 @@ class QuantidadeDeResultados
             $localUnwanted = 0;
             if ($pm > $maxVM) {
                 for ($i = $maxVM + 1; $i <= $pm; $i++) {
-                    $tmp = QuantidadeDeResultados::calcCombination($pm, $i);
+                    $tmp = Approximation::calcCombination($pm, $i);
                     $localUnwanted+= $tmp;
                 }
             }
@@ -51,11 +51,11 @@ class QuantidadeDeResultados
   
     static function fact($a) {
         if ($a <= 1) return 1;
-        else return $a * QuantidadeDeResultados::fact(($a - 1));
+        else return $a * Approximation::fact(($a - 1));
     }
     
     static function calcCombination($n, $s) {
-        $resp = QuantidadeDeResultados::fact($n) / (QuantidadeDeResultados::fact($s) * QuantidadeDeResultados::fact($n - $s));
+        $resp = Approximation::fact($n) / (Approximation::fact($s) * Approximation::fact($n - $s));
         return $resp;
     }
 
@@ -87,9 +87,9 @@ class QuantidadeDeResultados
         foreach ($scenario['rpm'] as $pmName => $numOfVMsInPM) {
             $unwantedLocal = 0;
             if ($numOfVMsInPM > $maxVM) {
-                list($out,$in) = QuantidadeDeResultados::getOutsidersInsiders($pmName,$scenario);
+                list($out,$in) = Approximation::getOutsidersInsiders($pmName,$scenario);
                 for ($i = $maxVM+1; $i <= $numOfVMsInPM; $i++) {
-                    $inConsolidated = QuantidadeDeResultados::getInsidersCombinations($in, $numOfVMsInPM-$i);
+                    $inConsolidated = Approximation::getInsidersCombinations($in, $numOfVMsInPM-$i);
                     $unwantedLocal += $out * $inConsolidated;
                 }
             }
@@ -106,9 +106,9 @@ class QuantidadeDeResultados
         foreach ($scenario['rpm'] as $pmName => $pm) {
             $localUnwanted = 0;
             if ($pm > $maxVM) {
-                $multi = QuantidadeDeResultados::getOutsidersInsiders($pmName,$scenario)[0];
+                $multi = Approximation::getOutsidersInsiders($pmName,$scenario)[0];
                 for ($i = $maxVM+1; $i <= $pm; $i++) {
-                    $tmp = QuantidadeDeResultados::calcCombination($pm, $i)*$multi;
+                    $tmp = Approximation::calcCombination($pm, $i)*$multi;
                     $localUnwanted += $tmp;
                 }
             }
@@ -118,7 +118,7 @@ class QuantidadeDeResultados
     }
     static function getInsidersCombinations(&$insiders, $size){
         if($size <= 0) return 1;
-        $subtrees = QuantidadeDeResultados::_getInsidersCombinations( $insiders, $size);
+        $subtrees = Approximation::_getInsidersCombinations( $insiders, $size);
         return array_sum($subtrees);
     }
 
@@ -129,26 +129,26 @@ class QuantidadeDeResultados
         $end = count($insiders)-$size;
         
         for ( $i = $pos ; $i <= $end ; $i++ ){
-            $subtree = QuantidadeDeResultados::_getInsidersCombinations( $insiders, $size-1, $i+1);
+            $subtree = Approximation::_getInsidersCombinations( $insiders, $size-1, $i+1);
             foreach ($subtree as $value) 
                 $return[] = $insiders[$i]*$value;
         }
         return $return;
     }
     static function calculateAvgCombSplitterApproach($scenario, $maxVM) {
-        $quantities = QuantidadeDeResultados::getCombinatorialSliceQuantities($scenario, $maxVM);
+        $quantities = Approximation::getCombinatorialSliceQuantities($scenario, $maxVM);
         return array_sum($quantities)/count($quantities);
     }
     static function calculateSumCombSplitterApproach($scenario, $maxVM) {
-        $quantities = QuantidadeDeResultados::getCombinatorialSliceQuantities($scenario, $maxVM);
+        $quantities = Approximation::getCombinatorialSliceQuantities($scenario, $maxVM);
         return array_sum($quantities);
     }
     static function calculateProdSequencialSplitterApproach($scenario, $maxVM) {
-        $quantities = QuantidadeDeResultados::getSequencialSliceQuantities($scenario, $maxVM);
+        $quantities = Approximation::getSequencialSliceQuantities($scenario, $maxVM);
         return array_product($quantities);
     }
     static function calculateSumSequencialSplitterApproach($scenario, $maxVM) {
-        $quantities = QuantidadeDeResultados::getSequencialSliceQuantities($scenario, $maxVM);
+        $quantities = Approximation::getSequencialSliceQuantities($scenario, $maxVM);
         return array_sum($quantities);
     }
     static function getSequencialSliceQuantities($scenario, $maxVM) {
@@ -159,7 +159,7 @@ class QuantidadeDeResultados
         while ( $p < $scenario['nvms']){
             $slice = array_slice($scenario['placements'], $p, $slice_size);
             $slice_scenario = Scenario::buildScenarioByPlacements($slice);
-            $quatities[] = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($slice_scenario,$maxVM);
+            $quatities[] = Approximation::calcularComRegrasMaxVMOutIn($slice_scenario,$maxVM);
             $p += $slice_size;
         }
 
@@ -181,7 +181,7 @@ class QuantidadeDeResultados
                 $slice[] = $scenario['placements'][$index];
             }
             $sliceScenario = Scenario::buildScenarioByPlacements($slice);
-            $quatities[] = QuantidadeDeResultados::calcularComRegrasMaxVMOutIn($sliceScenario,$maxVM);
+            $quatities[] = Approximation::calcularComRegrasMaxVMOutIn($sliceScenario,$maxVM);
         }
 
         return $quatities;
@@ -207,7 +207,7 @@ class QuantidadeDeResultados
                     //Prepare to drilldown
                     $level++;
                     $usageVector[$pmName] = isset($usageVector[$pmName])? $usageVector[$pmName]+1 : 1;
-                    QuantidadeDeResultados::treeSearchApproach( $scenario, $maxVM, $level , $usageVector, $stateCounter);
+                    Approximation::treeSearchApproach( $scenario, $maxVM, $level , $usageVector, $stateCounter);
                     $level--;
                     $usageVector[$pmName]--;
                 }
