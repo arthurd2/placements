@@ -18,7 +18,7 @@ class Combinations
         return $result;
     }
 
-    static function generateAllCombinationsMaxVM(&$arrays, $max, $i = 0, &$hash_vm = array()) {
+    static function generateAllCombinationsMaxVM(&$arrays, $max, $i = 0) {
         $slice = array_slice( $arrays, $i , 1 );
         $news = array_pop( $slice );
 
@@ -32,12 +32,12 @@ class Combinations
         }
         
         // get combinations from subsequent arrays
-        $tmp = Combinations::GenerateAllCombinationsMaxVM($arrays, $max, $i + 1,$hash_vm);
+        $tmp = Combinations::GenerateAllCombinationsMaxVM($arrays, $max, $i + 1);
         $result = array();
         
         // concat each array from tmp with each element from $arrays[$i]
         foreach ( $news as $v) {
-            list($vmName , $pmName) = explode(':', $v);
+            $pmName = explode(':', $v)[1];
             foreach ($tmp as $t) {
                 if( !isset($t['stat'][$pmName]) or $t['stat'][$pmName] < $max ){
                     $state = array_merge(array($v), $t) ;
@@ -59,7 +59,7 @@ class Combinations
         list($null , $pmName_new) = explode(':', $v);
         $count = 1;
         foreach ($t as $place) {
-            list($null,$pmName) = explode(':', $place);
+            $pmName = explode(':', $place)[1];
             //checar se a performance melhora com um array de counters
             if ($pmName_new == $pmName)
                 $count++;
@@ -69,7 +69,7 @@ class Combinations
 
     static function filterCombinationsByMaxVm($combinations, $max) {
         foreach ($combinations as $key => $combination) {
-            list($v, $p) = Combinations::montaVeP(array($combination));
+            $p = Combinations::montaVeP(array($combination))[1];
             if (Combinations::hasMoreThen($p, $max)) {
                 unset($combinations[$key]);
             }
