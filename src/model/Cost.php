@@ -1,6 +1,6 @@
 <?php
 
-class Cost{
+class Cost extends Singleton{
 
 	
 }

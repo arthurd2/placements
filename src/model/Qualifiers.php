@@ -1,17 +1,7 @@
 <?php
 class Qualifiers extends HandlerSingleton {
-	static function add($class){
-        $costs = Qualifiers::getInstance();
-        $interfaceClass = 'InterfaceQualifier';
-        $extendsClass = 'Qualifier';
-        
-        $implements = class_implements($class);
-        if (in_array($interfaceClass, $implements) and is_subclass_of($class, $extendsClass))
-            parent::add($class);
-        else 
-            throw new Exception("Class '$class' does not: implements '$interfaceClass' or extends '$extendsClass'", 1);
-        
-	}
+    protected $interfaceClass = 'InterfaceQualifier';
+    protected $extendsClass = 'Qualifier';
 
     static function getBenefit(& $cvmp){
     	//TODO Test Me

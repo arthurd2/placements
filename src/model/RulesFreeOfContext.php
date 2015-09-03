@@ -2,15 +2,10 @@
 
 final class RulesFreeOfContext extends HandlerSingleton
 {
-    static function add($class) {
-        $interfaceClass = 'RuleFreeOfContext';
-        $extendsClass = 'Rule';
+    protected $interfaceClass = 'RuleFreeOfContext';
+    protected $extendsClass = 'Rule';
 
-        $implements = class_implements($class);
-        if (in_array($interfaceClass, $implements) and is_subclass_of($class, $extendsClass)) parent::add($class);
-        else throw new Exception("Class '$class' does not: implements '$interfaceClass' or extends '$extendsClass'", 1);
-    }
-    
+  
     public static function isAllowed($vm, $pm) {
         $rules = RulesFreeOfContext::getClasses();
         

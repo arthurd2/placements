@@ -2,6 +2,9 @@
 class HandlerSingleton {
 	protected $classes;
 	protected static $instance = [];
+    protected $interfaceClass = 'PHPUnit_Framework_Test';
+    protected $extendsClass = 'PHPUnit_Framework_TestCase';
+
 
 	protected function __construct(){
 		$this->classes = [];
@@ -19,10 +22,17 @@ class HandlerSingleton {
 	static function add($class){
 		$called = get_called_class();
 		$instance = $called::getInstance();
-		if (class_exists($class))
+		$interfaceClass = $instance->interfaceClass;
+        $extendsClass = $instance->extendsClass;
+        
+        $implements = class_implements($class);
+		if (class_exists($class) and in_array($interfaceClass, $implements) and is_subclass_of($class, $extendsClass))
 			$instance->classes[] = $class;
-		else
-			throw new Exception("Class '$class' does not exists.", 1);
+		else{
+			throw new Exception("Class '$class' does not: implements '$interfaceClass' or extends '$extendsClass'", 1);
+			return false;
+		}
+		return true;
 	}
 
 	static function getClasses(){
