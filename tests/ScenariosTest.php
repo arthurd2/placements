@@ -1,5 +1,4 @@
 <?php
-require_once "src/model/Scenario.php";
 
 class GerarScenariosTest extends PHPUnit_Framework_TestCase
 {
@@ -75,15 +74,5 @@ class GerarScenariosTest extends PHPUnit_Framework_TestCase
             $this->assertEquals($value,$scenario2['rpm'][$key],"# of placements of $key !match");
  
     }
-    /**
-     * @depends testQueNaoExiste
-     */
-    public function testloadVMWareTree(){
-        list($vms,$pms) = Scenario::loadVMWareTree();
-        $this->assertGreaterThan(0,count($vms),'VMs not set');
-        $this->assertGreaterThan(0,count($pms),'PMs not set');
-    }
-
-
 
 }

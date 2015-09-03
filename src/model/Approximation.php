@@ -12,29 +12,29 @@ class Approximation
         }
         return $retorno;
     }
-
+    
     static function calcularComRegrasMaxVMProd($scenario, $maxVM) {
         $todas = 1;
         foreach ($scenario['rpm'] as $pmName => $vms) {
             $combinacao = Approximation::calcCombination($vms, $maxVM);
-            $todas *= $combinacao;
+            $todas*= $combinacao;
         }
         return $todas;
     }
-
+    
     static function calcularComRegrasMaxVMSum($scenario, $maxVM) {
         $todas = 0;
         foreach ($scenario['rpm'] as $pmName => $vms) {
             $combinacao = Approximation::calcCombination($vms, $maxVM);
-            $todas += $combinacao;
+            $todas+= $combinacao;
         }
         return $todas;
     }
-
+    
     static function calcularComRegrasMaxVMSub($scenario, $maxVM) {
-
+        
         $indesejado = 0;
-
+        
         $todas = array_product($scenario['rvm']);
         foreach ($scenario['rpm'] as $pmName => $pm) {
             $localUnwanted = 0;
@@ -48,7 +48,7 @@ class Approximation
         }
         return $todas - $indesejado;
     }
-  
+    
     static function fact($a) {
         if ($a <= 1) return 1;
         else return $a * Approximation::fact(($a - 1));
@@ -58,161 +58,213 @@ class Approximation
         $resp = Approximation::fact($n) / (Approximation::fact($s) * Approximation::fact($n - $s));
         return $resp;
     }
-
+    
     static function getOutsidersInsiders($pm, $scenario) {
         $outsider = 1;
         $insider = array();
         foreach ($scenario['placements'] as $vm => $places) {
             $flag = true;
             foreach ($places as $place) {
-                $pm_name = explode(':', $place)[1];
+                $pmName = explode(':', $place) [1];
+                
                 //If the current VM can be host in the evaluated PM, do not multiply
-                if($pm == $pm_name){
+                if ($pm == $pmName) {
                     $flag = false;
                     break;
                 }
             }
-            if($flag)
-                $outsider *= count($places);
-            else
-                $insider[] = count($places)-1;
+            if ($flag) $outsider*= count($places);
+            else $insider[] = count($places) - 1;
         }
-        return array( $outsider, $insider);
+        return array($outsider, $insider);
     }
     
     static function calcularComRegrasMaxVMOutIn($scenario, $maxVM) {
         $unwanted = 0;
         $all = array_product($scenario['rvm']);
-
+        
         foreach ($scenario['rpm'] as $pmName => $numOfVMsInPM) {
             $unwantedLocal = 0;
             if ($numOfVMsInPM > $maxVM) {
-                list($out,$in) = Approximation::getOutsidersInsiders($pmName,$scenario);
-                for ($i = $maxVM+1; $i <= $numOfVMsInPM; $i++) {
-                    $inConsolidated = Approximation::getInsidersCombinations($in, $numOfVMsInPM-$i);
-                    $unwantedLocal += $out * $inConsolidated;
+                list($out, $in) = Approximation::getOutsidersInsiders($pmName, $scenario);
+                for ($i = $maxVM + 1; $i <= $numOfVMsInPM; $i++) {
+                    $inConsolidated = Approximation::getInsidersCombinations($in, $numOfVMsInPM - $i);
+                    $unwantedLocal+= $out * $inConsolidated;
                 }
             }
-            $unwanted += $unwantedLocal;
+            $unwanted+= $unwantedLocal;
         }
         return $all - $unwanted;
     }
-
+    
     static function calcularComRegrasMaxVMSubProdOthers($scenario, $maxVM) {
-
+        
         $indesejado = 0;
-
+        
         $todas = array_product($scenario['rvm']);
         foreach ($scenario['rpm'] as $pmName => $pm) {
             $localUnwanted = 0;
             if ($pm > $maxVM) {
-                $multi = Approximation::getOutsidersInsiders($pmName,$scenario)[0];
-                for ($i = $maxVM+1; $i <= $pm; $i++) {
-                    $tmp = Approximation::calcCombination($pm, $i)*$multi;
-                    $localUnwanted += $tmp;
+                $multi = Approximation::getOutsidersInsiders($pmName, $scenario) [0];
+                for ($i = $maxVM + 1; $i <= $pm; $i++) {
+                    $tmp = Approximation::calcCombination($pm, $i) * $multi;
+                    $localUnwanted+= $tmp;
                 }
             }
-            $indesejado += $localUnwanted;
+            $indesejado+= $localUnwanted;
         }
         return $todas - $indesejado;
     }
-    static function getInsidersCombinations(&$insiders, $size){
-        if($size <= 0) return 1;
-        $subtrees = Approximation::_getInsidersCombinations( $insiders, $size);
+    static function getInsidersCombinations(&$insiders, $size) {
+        if ($size <= 0) return 1;
+        $subtrees = Approximation::_getInsidersCombinations($insiders, $size);
         return array_sum($subtrees);
     }
-
-    static function _getInsidersCombinations(&$insiders, $size,$pos = 0){
-        if($size <= 0) return array(1);
-
-        $return = array();
-        $end = count($insiders)-$size;
+    
+    static function _getInsidersCombinations(&$insiders, $size, $pos = 0) {
+        if ($size <= 0) return array(1);
         
-        for ( $i = $pos ; $i <= $end ; $i++ ){
-            $subtree = Approximation::_getInsidersCombinations( $insiders, $size-1, $i+1);
-            foreach ($subtree as $value) 
-                $return[] = $insiders[$i]*$value;
+        $return = array();
+        $end = count($insiders) - $size;
+        
+        for ($i = $pos; $i <= $end; $i++) {
+            $subtree = Approximation::_getInsidersCombinations($insiders, $size - 1, $i + 1);
+            foreach ($subtree as $value) $return[] = $insiders[$i] * $value;
         }
         return $return;
     }
     static function calculateAvgCombSplitterApproach($scenario, $maxVM) {
         $quantities = Approximation::getCombinatorialSliceQuantities($scenario, $maxVM);
-        return array_sum($quantities)/count($quantities);
+        return array_sum($quantities) / count($quantities);
     }
-    static function calculateSumCombSplitterApproach($scenario, $maxVM) {
-        $quantities = Approximation::getCombinatorialSliceQuantities($scenario, $maxVM);
-        return array_sum($quantities);
-    }
-    static function calculateProdSequencialSplitterApproach($scenario, $maxVM) {
-        $quantities = Approximation::getSequencialSliceQuantities($scenario, $maxVM);
-        return array_product($quantities);
-    }
-    static function calculateSumSequencialSplitterApproach($scenario, $maxVM) {
-        $quantities = Approximation::getSequencialSliceQuantities($scenario, $maxVM);
-        return array_sum($quantities);
-    }
+    
     static function getSequencialSliceQuantities($scenario, $maxVM) {
-        $slice_size = ($maxVM*2) + 1 ;
+        $sliceSize = ($maxVM * 2) + 1;
         $quatities = array();
-
+        
         $p = 0;
-        while ( $p < $scenario['nvms']){
-            $slice = array_slice($scenario['placements'], $p, $slice_size);
-            $slice_scenario = Scenario::buildScenarioByPlacements($slice);
-            $quatities[] = Approximation::calcularComRegrasMaxVMOutIn($slice_scenario,$maxVM);
-            $p += $slice_size;
+        while ($p < $scenario['nvms']) {
+            $slice = array_slice($scenario['placements'], $p, $sliceSize);
+            $sliceScenario = Scenario::buildScenarioByPlacements($slice);
+            $quatities[] = Approximation::calcularComRegrasMaxVMOutIn($sliceScenario, $maxVM);
+            $p+= $sliceSize;
         }
-
+        
         return $quatities;
     }
     static function getCombinatorialSliceQuantities($scenario, $maxVM) {
         require_once 'libs/Combinatorics.php';
         $combinatorics = new Math_Combinatorics;
-        $sliceSize = ($maxVM*2) + 1 ;
-
+        $sliceSize = ($maxVM * 2) + 1;
+        
         $input = array_keys($scenario['placements']);
         $combinations = $combinatorics->combinations($input, $sliceSize);
-
+        
         $quatities = array();
-
+        
         foreach ($combinations as $combination) {
             $slice = array();
             foreach ($combination as $index) {
                 $slice[] = $scenario['placements'][$index];
             }
             $sliceScenario = Scenario::buildScenarioByPlacements($slice);
-            $quatities[] = Approximation::calcularComRegrasMaxVMOutIn($sliceScenario,$maxVM);
+            $quatities[] = Approximation::calcularComRegrasMaxVMOutIn($sliceScenario, $maxVM);
         }
-
+        
         return $quatities;
     }
-
+    
     //TODO Arrumar casos de VMs sem places!!!
-    static function treeSearchApproach(&$scenario, &$maxVM, &$level = 0 , &$usageVector = array(), &$stateCounter = 0) {
-        //// Select the array of placements of VM => $level
-        $key = array_keys($scenario['rvm'])[$level];
-        $vmPlaces = $scenario['placements'][$key];
-
+    static function treeSearchApproach(&$scenario, &$maxVM) {
+        $placements = array_values($scenario['placements']);
+        $usageVector = array();
+        $level = 0;
+        foreach ($scenario['rpm'] as $key => $value) $usageVector[$key] = 0;
+        $nvms = $scenario['nvms'];
+        return Approximation::treeSearchApproachBackEnd($placements, $nvms, $maxVM, $level, $usageVector);
+    }
+    static function treeSearchApproachBackEnd(&$placements, &$nvms, &$maxVM, &$level = 0, &$usageVector = array(), &$stateCounter = 0) {
+        
         //Interects foreach possible placements of that VM
-        foreach ( $vmPlaces as $p) {
-            $pmName = explode(':', $p)[1];
-
+        foreach ($placements[$level] as $p) {
+            $pmName = explode(':', $p) [1];
+            
             //Checks if the PM is not full
-            if(!isset($usageVector[$pmName]) || $usageVector[$pmName] < $maxVM){
+            if ($usageVector[$pmName] < $maxVM) {
+                
                 //Check if the last VM to host
-                if( $level >= $scenario['nvms']-1 ){
+                if ($level >= $nvms - 1) {
+                    
                     //Just count one state
                     $stateCounter++;
-                }else{
+                } 
+                else {
+                    
                     //Prepare to drilldown
                     $level++;
-                    $usageVector[$pmName] = isset($usageVector[$pmName])? $usageVector[$pmName]+1 : 1;
-                    Approximation::treeSearchApproach( $scenario, $maxVM, $level , $usageVector, $stateCounter);
+                    $usageVector[$pmName]++;
+                    Approximation::treeSearchApproachBackEnd($placements, $nvms, $maxVM, $level, $usageVector, $stateCounter);
                     $level--;
                     $usageVector[$pmName]--;
                 }
             }
         }
         return $stateCounter;
+    }
+    
+    /**
+     * @codeCoverageIgnore
+     * Someday i will return here.
+     * Farewell my friend.
+     */
+    static function realTreeSearchApproach($scenario) {
+        global $ctd;
+        $placements = array_values($scenario['placements']);
+        usort($placements, 'Approximation::cmp');
+        $usageVector = array();
+        $level = 0;
+        foreach ($scenario['pms'] as $pm) $usageVector[$pm['name']] = intval($pm['memory']);
+        $nvms = $scenario['nvms'];
+        $vms = $scenario['vms'];
+        
+        return Approximation::realTreeSearchApproachBackEnd($placements, $nvms, $vms, $level, $usageVector, $ctd);
+    }
+    
+    /**
+     * @codeCoverageIgnore
+     * Someday i will return here.
+     * Farewell my friend.
+     */
+    static function realTreeSearchApproachBackEnd(&$placements, &$nvms, &$vms, &$level = 0, &$usageVector = array(), &$stateCounter = 0) {
+        
+        //Interects foreach possible placements of that VM
+        foreach ($placements[$level] as $p) {
+            list($vmName, $pmName) = explode(':', $p);
+            
+            //Checks if the PM is not full
+            if ($usageVector[$pmName] > $vms[$vmName]['memory']) {
+                
+                //Check if the last VM to host
+                if ($level >= $nvms - 1) {
+                    
+                    //Just count one state
+                    $stateCounter++;
+                } 
+                else {
+                    
+                    //Prepare to drilldown
+                    $level++;
+                    $usageVector[$pmName]-= $vms[$vmName]['memory'];
+                    Approximation::realTreeSearchApproachBackEnd($placements, $nvms, $vms, $level, $usageVector, $stateCounter);
+                    $level--;
+                    $usageVector[$pmName]+= $vms[$vmName]['memory'];
+                }
+            }
+        }
+        return $stateCounter;
+    }
+    static function cmp($a, $b) {
+        if (count($a) == count($b)) return 0;
+        return (count($a) < count($b)) ? -1 : 1;
     }
 }

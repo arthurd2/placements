@@ -6,8 +6,7 @@ class Scenario
     public $npms;
     public $scenario;
     
-    private function __construct() {
-    }
+    private function __construct() {}
     
     static function geraPlacements($apr, $nvm, $npm) {
         
@@ -122,73 +121,5 @@ class Scenario
         
         return Scenario::buildScenarioByPlacements($placements);
     }
-    
-    static function getScenarioFromVMWare() {
-    }
-    
-    static function loadVMWareTree() {
-        //https://www.vmware.com/support/developer/vc-sdk/visdk41pubs/ApiReference/vim.VirtualMachine.html
-        //http://pubs.vmware.com/vsphere-60/index.jsp?topic=/com.vmware.wssdk.apiref.doc/index.html&single=true&__utma=207178772.1811249502.1438681066.1438681066.1438681066.1&__utmb=207178772.0.10.1438681066&__utmc=207178772&__utmx=-&__utmz=207178772.1438681066.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)&__utmv=-&__utmk=104578819
-        require_once "libs/vmwarephp/Bootstrap.php";
 
-        $cache = memcache_connect('localhost', 11211);
-        $vmware = new \Vmwarephp\Vhost(getenv('VMHOST'), getenv('VMUSER'), getenv('VMPASS'));
-        $vms = $cache->get('vms');
-        if ($vms == false) { 
-            //'name', 'summary','network','datastore', 'config'
-            $virtualMachines = array();
-            $virtualMachines = $vmware->findAllManagedObjects('VirtualMachine', array('name', 'network', 'datastore'));
-            foreach ($virtualMachines as $vm) {
-                $newVM['name'] = $vm->name;
-                
-                //$newVM->cpus = $vm->summary->config->numCpu
-                $newVM['memory'] = $vm->config->hardware->memoryMB;
-                
-                //$newVM->annotation = $vm->config->annotation
-                $newVM['uuid'] = $vm->config->uuid;
-                
-                $newVM['networks'] = array();
-                foreach ($vm->network as $network) 
-                    $newVM['networks'][] = $network->name;
-                
-                $newVM['datastores'] = array();
-                foreach ($vm->datastore as $datastore) 
-                    $newVM['datastores'][] = $datastore->info->name;
-                
-                /*
-                $newVM->disco = 0
-                $devs = $vm->config->hardware->device
-                foreach ($devs as $dev) {
-                    if (isset($dev->capacityInKB)) $newVM->disco+= ($dev->capacityInKB / (1024 * 1024))
-                }
-                */
-                $vms[$newVM['uuid']] = $newVM;
-            }
-            $cache->set('vms', $vms, false, 259200);
-        }
-        $pms = $cache->get('pms');
-        if (!$pms) {
-            //'name', 'network', 'datastore', 'hardware'
-            $physicalMachines = $vmware->findAllManagedObjects('HostSystem', array('name'));
-            
-            foreach ($physicalMachines as $pm) {
-                $newPM = array();
-                $newPM['name'] = $pm->name;
-                //$newPM['uuid'] = $pm->config->uuid
-                $newPM['networks'] = array();
-                foreach ($pm->network as $network) {
-                    $newPM['networks'][] = $network->name;
-                }
-                $newPM['datastores'] = array();
-                foreach ($pm->datastore as $datastore) {
-                    $newPM['datastores'][] = $datastore->info->name;
-                }
-                $newPM['memory'] = intval($pm->hardware->memorySize / (1024 * 1024));
-                
-                $pms[$newPM['name']] = $newPM;
-            }
-            $cache->set('pms', $pms, false, 259200);
-        }
-        return array('vms'=>$vms,'pms'=>$pms);
-    }
 }

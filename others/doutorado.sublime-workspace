@@ -4,8 +4,80 @@
 		"selected_items":
 		[
 			[
+				"is",
+				"isset"
+			],
+			[
+				"fun",
+				"function"
+			],
+			[
+				"pa",
+				"parentClass"
+			],
+			[
+				"rea",
+				"realBen"
+			],
+			[
+				"val",
+				"valueMin"
+			],
+			[
+				"low",
+				"lowVM"
+			],
+			[
 				"new",
-				"new_vm"
+				"newCvmp"
+			],
+			[
+				"vm",
+				"vmMin"
+			],
+			[
+				"ev",
+				"evalCand"
+			],
+			[
+				"eva",
+				"evalBase"
+			],
+			[
+				"globa",
+				"global"
+			],
+			[
+				"ar",
+				"array_pop"
+			],
+			[
+				"json",
+				"json_decode"
+			],
+			[
+				"js",
+				"json"
+			],
+			[
+				"str_re",
+				"str_replace"
+			],
+			[
+				"array",
+				"array_search"
+			],
+			[
+				"fil",
+				"fileVm"
+			],
+			[
+				"jso",
+				"json_decode"
+			],
+			[
+				"load",
+				"loadPMs"
 			],
 			[
 				"st",
@@ -32,14 +104,6 @@
 				"placements"
 			],
 			[
-				"js",
-				"json_decode"
-			],
-			[
-				"jso",
-				"json_encode"
-			],
-			[
 				"pm",
 				"pmName"
 			],
@@ -56,10 +120,6 @@
 				"scenario"
 			],
 			[
-				"array",
-				"array_slice"
-			],
-			[
 				"for",
 				"foreach	foreach …"
 			],
@@ -74,10 +134,6 @@
 			[
 				"v",
 				"value"
-			],
-			[
-				"rea",
-				"real_r"
 			],
 			[
 				"array_",
@@ -108,39 +164,31 @@
 	"buffers":
 	[
 		{
-			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/todo.todo",
+			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/Bootstrap.php",
 			"settings":
 			{
-				"buffer_size": 403,
+				"buffer_size": 203,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Scenario.php",
+			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/RulesSensitiveToTheContextTest.php",
 			"settings":
 			{
-				"buffer_size": 8889,
+				"buffer_size": 2200,
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/ScenariosTest.php",
+			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/RulesSensitiveToTheContext.php",
 			"settings":
 			{
-				"buffer_size": 4266,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/phpunit.xml",
-			"settings":
-			{
-				"buffer_size": 581,
+				"buffer_size": 828,
 				"line_ending": "Unix"
 			}
 		}
 	],
-	"build_system": "Packages/User/PHPUnit.sublime-build",
+	"build_system": "Packages/User/phpcli.sublime-build",
 	"build_system_choices":
 	[
 		[
@@ -183,7 +231,7 @@
 				]
 			],
 			[
-				"Packages/User/PHPUnit.sublime-build",
+				"Packages/User/phpcli.sublime-build",
 				""
 			]
 		]
@@ -191,21 +239,17 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 243.0,
-		"last_filter": "form",
+		"height": 392.0,
+		"last_filter": "for",
 		"selected_items":
 		[
-			[
-				"form",
-				"CodeFormatter: Format as PHP Syntax"
-			],
 			[
 				"for",
 				"CodeFormatter: Format as PHP Syntax"
 			],
 			[
-				"php",
-				"Set Syntax: PHP"
+				"xml",
+				"Indent XML"
 			],
 			[
 				"ins",
@@ -213,7 +257,15 @@
 			],
 			[
 				"forma",
+				"CodeFormatter: Format Code"
+			],
+			[
+				"form",
 				"CodeFormatter: Format as PHP Syntax"
+			],
+			[
+				"php",
+				"Set Syntax: PHP"
 			],
 			[
 				"insta",
@@ -274,32 +326,59 @@
 	"expanded_folders":
 	[
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/libs",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/libs/vmwarephp/library/Vmwarephp",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/public",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/basics",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/view"
 	],
 	"file_history":
 	[
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/HandlerSingletonTest.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/RulesFreeOfContextTest.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/RuleSensitiveToTheContext.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/RulesSensitiveToTheContext.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/basics/HandlerSingleton.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/RuleFreeOfContext.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/RulesFreeOfContext.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Costs.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/OrderCloud.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Qualifier.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Qualifiers.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Cvmp.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/ScenariosTest.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Rule.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/RuleTest.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/Bootstrap.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Bootstrap.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Singleton.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/phpunit.xml",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Scenario.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Combinations.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Approximation.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/rules/RuleSensitiveToTheContext.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/rules/Qualifier.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/todo.todo",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Rules.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others/slurpSetic.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/index.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others/filename.2d.csv",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others/dados da simulacao.txt",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others/Constraints2D.gnuplot",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others/1-gerarScenarios.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others/2-CalculaQuantidades.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/QuantidadeDeResultadosTest.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/QuantidadeDeResultados.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/arvore.php",
+		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/envTest.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/VmwareTests.php",
 		"/home/arthur/Downloads/vim.wsdl",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others/PABFD-MCC.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/QuantidadeDeResultados.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/index.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/formats.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/QuantidadeDeResultadosTest.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/phpunit.xml",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/libs/vmwarephp/library/Vmwarephp/Vhost.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/ViewHelper.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/CombinacoesTest.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Combinations.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others/1-gerarScenarios.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/GerarScenariosTest.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Scenario.php",
 		"/home/arthur/.config/sublime-text-3/Packages/User/getelement.sublime-snippet",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/jquery.query-object.js",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/TestTimesListener.php",
@@ -307,7 +386,6 @@
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/view/Accordion.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/public/arruma.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/2-CalculaQuantidades.php",
-		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/others/Constraints2D.gnuplot",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/1-gerarScenarios.php",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/Scenarios_APR(0.75)_VMs(4,5,6,7,8,9,10,11,12)_PMs(3).json",
 		"/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/combinacoes.php",
@@ -371,6 +449,39 @@
 		"case_sensitive": false,
 		"find_history":
 		[
+			"rules",
+			"'evaluations'",
+			"^> ",
+			"valueMin",
+			"lowVM",
+			"scenario",
+			"_keys",
+			"overload",
+			"include_path",
+			"path",
+			"die",
+			"QuantidadeDeResultados",
+			"wasted",
+			"added",
+			"recursio",
+			"date(",
+			"date",
+			"slice_scenario",
+			"slice_size",
+			"pm_name",
+			"_",
+			"QuantidadeDeResultados",
+			"pm_tmp",
+			"in_consolidated",
+			"pm_tmp",
+			"slice_size",
+			"slice_scenario",
+			"new_vm",
+			"new_pm",
+			"pmName_new",
+			"r_vm",
+			"r_pm",
+			"hash_vm",
 			"new_vm",
 			"$host",
 			"$hostList",
@@ -432,9 +543,11 @@
 		"highlight": true,
 		"in_selection": false,
 		"preserve_case": false,
-		"regex": false,
+		"regex": true,
 		"replace_history":
 		[
+			"",
+			"Approximation",
 			"",
 			"\\'",
 			"['npms']",
@@ -462,114 +575,24 @@
 			[
 				{
 					"buffer": 0,
-					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/todo.todo",
+					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/Bootstrap.php",
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 403,
+						"buffer_size": 203,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								403,
-								403
+								203,
+								203
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/ToDone/ToDone.tmLanguage"
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 3,
-					"type": "text"
-				},
-				{
-					"buffer": 1,
-					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/Scenario.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 8889,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								7931,
-								7931
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 2827.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 0,
-					"type": "text"
-				},
-				{
-					"buffer": 2,
-					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/ScenariosTest.php",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 4266,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								4075,
-								4075
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
-						},
-						"translation.x": 0.0,
-						"translation.y": 1292.0,
-						"zoom_level": 1.0
-					},
-					"stack_index": 1,
-					"type": "text"
-				},
-				{
-					"buffer": 3,
-					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/phpunit.xml",
-					"semi_transient": false,
-					"settings":
-					{
-						"buffer_size": 581,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								190,
-								190
-							]
-						],
-						"settings":
-						{
-							"syntax": "Packages/XML/XML.tmLanguage",
-							"tab_size": 2,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
@@ -577,13 +600,74 @@
 					},
 					"stack_index": 2,
 					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/tests/RulesSensitiveToTheContextTest.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 2200,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1392,
+								1392
+							]
+						],
+						"settings":
+						{
+							"open_with_edit": true,
+							"syntax": "Packages/HTML/HTML.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 204.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "/home/arthur/Downloads/Seafile/Doutorado/Codigos/src/model/RulesSensitiveToTheContext.php",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 828,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								558,
+								558
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"tab_size": 4,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
 				}
 			]
 		}
 	],
 	"incremental_find":
 	{
-		"height": 25.0
+		"height": 34.0
 	},
 	"input":
 	{
@@ -614,7 +698,7 @@
 	"menu_visible": true,
 	"output.exec":
 	{
-		"height": 364.0
+		"height": 373.0
 	},
 	"output.find_results":
 	{
@@ -666,7 +750,7 @@
 	"show_open_files": true,
 	"show_tabs": true,
 	"side_bar_visible": true,
-	"side_bar_width": 283.0,
+	"side_bar_width": 256.0,
 	"status_bar_visible": true,
 	"template_settings":
 	{

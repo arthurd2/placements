@@ -1,6 +1,4 @@
 <?php
-require_once "src/model/Approximation.php";
-require_once "src/model/Scenario.php";
 
 class ApproximationTest extends PHPUnit_Framework_TestCase
 {
@@ -236,5 +234,10 @@ class ApproximationTest extends PHPUnit_Framework_TestCase
         $resp = Approximation::treeSearchApproach($scenario,$maxVM);
         $this->assertEquals(80,$resp,"# of approximation !match.");
         }
-
+     
+    public function testCmp() {
+        $this->assertEquals(0,Approximation::cmp([0],[0]),"Should be 0");
+        $this->assertEquals(1,Approximation::cmp([-5,0],[0]),"Should be 1");
+        $this->assertEquals(-1,Approximation::cmp([0],[5,0]),"Should be -1");
+    }
 }
