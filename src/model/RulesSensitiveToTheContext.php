@@ -11,7 +11,9 @@ final class RulesSensitiveToTheContext extends HandlerSingleton
         foreach ($rules as $class) {
             $allowed = $class::isAllowed($cvmp);
             $isEnable = $class::isEnable();
-            if ($isEnable and !$allowed) return false;
+            if ($isEnable and !$allowed) {
+                return false;
+            }
         }
         return true;
     }

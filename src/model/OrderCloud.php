@@ -18,29 +18,23 @@ class OrderCloud {
 		$pareto = [];
 		//Select Lower
 		$lowVM = $this->selectLowerVm($baseCvmp,$ignoreVMs);
-		echo(PHP_EOL.var_dump($lowVM).PHP_EOL);
 		//generateCVMP
 		$cvmps = $this->generateCVMP($baseCvmp,$lowVM);
-
 		//foreach Possible CVMP
-		foreach ($cvmps as $key => $cvmp) 
-			//if isNonDominant
-			if($this->isNonDominant($baseCvmp,$cvmp))
-				//recursion
+		foreach ($cvmps as $key => $cvmp){
+			if($this->isNonDominant($baseCvmp,$cvmp)){
 				$pareto[] = $this->organize($cvmp,$ignoreVMs,false);
-
-		if(empty($pareto))
-			$sCvmp = $baseCvmp;
-		else{
-			$pareto[] = $baseCvmp;
-			$sCvmp = getCvmpWithMaxCostBenefit($pareto);
+			}
 		}
-
-
+		if(empty($pareto)){
+			$sCvmp = $baseCvmp;
+		}else{
+			$pareto[] = $baseCvmp;
+			$sCvmp = $this->getCvmpWithMaxCostBenefit($pareto);
+		}
+		//Check if ignoreVMs set will full
 		$isTheLastRecursion = (count($ignoreVMs) >= $baseCvmp['nvms']-1) ;
-		
 		if( $isMainInteration && !$isTheLastRecursion  ){
-			
 			$ignoreVMs[] = $this->selectLowerVm($sCvmp, $ignoreVMs);
 			$sCvmp = $this->organize($sCvmp,$ignoreVMs,true);
 		}
@@ -49,7 +43,6 @@ class OrderCloud {
 
 
 	public function getCvmpWithMaxCostBenefit(& $pareto){
-		//TODO Test Me
 		$cbMin = -1;
 		$cvmpMin = null;
 
@@ -75,8 +68,9 @@ class OrderCloud {
 			if (RulesFreeOfContext::isAllowed($vm,$pm)){
 				$newCvmp = $cvmp;
 				Cvmp::addVm($newCvmp,$vm,$pm);
-				if (RulesSensitiveToTheContext::isAllowed($newCvmp))
+				if (RulesSensitiveToTheContext::isAllowed($newCvmp)){
 					$newCvmps[] = $newCvmp;
+				}
 			}
 		}
 		return $newCvmps;
@@ -110,7 +104,9 @@ class OrderCloud {
 		$count = 0;
 		foreach ($evalBase as $vm => $value) {
 			$count += $evalCand[$vm] - $value;
-			if($value > $evalCand[$vm]) return false;
+			if($value > $evalCand[$vm]) {
+				return false;
+			}
 		}
 		return ($count != 0) ;
 	}

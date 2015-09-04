@@ -13,14 +13,11 @@ class OrderCloudTest extends PHPUnit_Framework_TestCase
         foreach (Qualifiers::getClasses() as $class) Qualifiers::del($class);
         foreach (RulesFreeOfContext::getClasses() as $class) RulesFreeOfContext::del($class);
         foreach (RulesSensitiveToTheContext::getClasses() as $class) RulesSensitiveToTheContext::del($class);
-//        foreach (Qualifiers::getClasses() as $class) echo $class.PHP_EOL;
-
-        Qualifiers::add('QUAmirror');        
     }
 
 
     public function testIsNonDominant() {
-
+        Qualifiers::add('QUAmirror');
         $places = ['v1' => 'p1', 'v2' => 'p1', 'v3' => 'p2', 'v4' => 'p2', 'v5' => 'p3', ];
         $cvmp1 = Cvmp::buildCVmpByPlacements($places);
         $cvmp2 = Cvmp::buildCVmpByPlacements($places);
@@ -44,8 +41,6 @@ class OrderCloudTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('v1',$oc->selectLowerVm($cvmp,$ivm));
         $ivm[] = 'v1';
         $this->assertEquals('v2',$oc->selectLowerVm($cvmp,$ivm));
-
-
     }
     /**
      * @depends testSelectLoweVM
@@ -75,6 +70,7 @@ class OrderCloudTest extends PHPUnit_Framework_TestCase
     }
 
     public function testgetCvmpWithMaxCostBenefit() {
+        Qualifiers::add('QUAmirror');
         $places = ['v1' => 'p1', 'v2' => 'p1', 'v3' => 'p2', 'v4' => 'p2', 'v5' => 'p3', ];
         $cvmp0 = Cvmp::buildCVmpByPlacements($places);
         $cvmp1 = Cvmp::buildCVmpByPlacements($places);
@@ -89,10 +85,8 @@ class OrderCloudTest extends PHPUnit_Framework_TestCase
         unset($best['qualifications']);
         $this->assertEquals($cvmp2,$best);
     }
-    /**
-     * @ depends xxx
-     */
-    public function testOrganize() {
+
+    public function testOrganizeDummy() {
         $places = ['v1' => 'p1', 'v2' => 'p1', 'v3' => 'p2', 'v4' => 'p2', 'v5' => 'p3', ];
         $cvmp0 = Cvmp::buildCVmpByPlacements($places);
         
@@ -101,5 +95,38 @@ class OrderCloudTest extends PHPUnit_Framework_TestCase
         $best = $oc->organize($cvmp0);
         unset($best['qualifications']);
         $this->assertEquals($cvmp0,$best);
+    }
+    /**
+     * @ depends xxx
+     */
+    public function testOrganize() {
+        $places = ['v1' => 'p1', 'v2' => 'p1', 'v3' => 'p2', 'v4' => 'p2', 'v5' => 'p3', ];
+        $cvmp0 = Cvmp::buildCVmpByPlacements($places);
+        $cvmp1 = Cvmp::buildCVmpByPlacements($places);
+        $cvmp1['mirror'] = 11;
+        $oc = new OrderCloud($cvmp0);
+
+        Qualifiers::add('QUAconsolidate');
+        $best = $oc->organize($cvmp1);
+        unset($best['qualifications']);
+        $x = array_search(5, $best['rpm']);
+        $this->assertEquals(5,$best['rpm'][$x]);
+        Qualifiers::del('QUAconsolidate');
+    }
+}
+
+class QUAconsolidate extends Qualifier implements InterfaceQualifier
+{
+    
+    static function evaluate(&$cvmp) {
+        $return = [];
+        $count = 0;
+        foreach ($cvmp['pmp'] as $pm) {
+            $count += count($pm)*count($pm);
+        }
+        foreach ($cvmp['vmp'] as $vm => $pm) {
+            $return[$vm] = $count;
+        }
+        return $return;
     }
 }
