@@ -27,7 +27,7 @@ class HandlerSingleton {
 		$interfaceClass = $instance->interfaceClass;
         $extendsClass = $instance->extendsClass;
         
-        $implements = class_implements($class);
+        $implements = @class_implements($class);
 		if (class_exists($class) and in_array($interfaceClass, $implements) and is_subclass_of($class, $extendsClass)){
 			$instance->classes[$class] = $class;
 		}else{

@@ -23,7 +23,8 @@ class Costs extends HandlerSingleton
     static function del($class) {
         parent::del($class);
         $costs = Costs::getInstance();
-        $costs->mainCostClass = array_pop(Costs::getClasses());
+        $classes = Costs::getClasses();
+        $costs->mainCostClass = array_pop($classes);
         return true;
     }
 }
