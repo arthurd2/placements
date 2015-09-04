@@ -33,7 +33,7 @@ class RulesSensitiveToTheContextTest extends PHPUnit_Framework_TestCase
 
      public function testIsAllowedEmptyClasses() {
         $handler = RulesSensitiveToTheContext::getInstance();
-        $this->assertTrue($handler->isAllowed(1), "Rule should Allow without classes");
+        $this->assertTrue($handler->isAllowed(1), " without classes");
     }   
 	/**
      * @depends testIsAllowedEmptyClasses

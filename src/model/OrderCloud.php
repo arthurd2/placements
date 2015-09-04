@@ -5,18 +5,20 @@ class OrderCloud {
 	private $qualifiers;
 	private $costs;
 
-	public function __construct(){
+	public function __construct($currentCvmp){
+		global $realCvmp;
+		$realCvmp = $currentCvmp;
 		//TODO  execute Load procedures from Qualifiers, Rules and Costs 
 
 	}
 
-	public function organize(CVMP $baseCvmp, $ignoreVMs = [], $isMainInteration = true){
+	public function organize( $baseCvmp, $ignoreVMs = [], $isMainInteration = true){
 		//TODO Test Me
 		//TODO set realCvmp
 		$pareto = [];
 		//Select Lower
 		$lowVM = $this->selectLowerVm($baseCvmp,$ignoreVMs);
-
+		echo(PHP_EOL.var_dump($lowVM).PHP_EOL);
 		//generateCVMP
 		$cvmps = $this->generateCVMP($baseCvmp,$lowVM);
 
@@ -34,9 +36,11 @@ class OrderCloud {
 			$sCvmp = getCvmpWithMaxCostBenefit($pareto);
 		}
 
-		$isLastRecursion = ( count($ignoreVMs) == $baseCvmp['nvms'] );
 
-		if( $isMainInteration and !$isLastRecursion  ){
+		$isTheLastRecursion = (count($ignoreVMs) >= $baseCvmp['nvms']-1) ;
+		
+		if( $isMainInteration && !$isTheLastRecursion  ){
+			
 			$ignoreVMs[] = $this->selectLowerVm($sCvmp, $ignoreVMs);
 			$sCvmp = $this->organize($sCvmp,$ignoreVMs,true);
 		}
@@ -56,14 +60,16 @@ class OrderCloud {
 				$cvmpMin = $cvmp;
 			}
 		}
-		return $vm;
+		return $cvmpMin;
 	}
-	public function generateCVMP(CVMP $cvmp, $vm){
-		//TODO Test Me
+	public function generateCVMP( $cvmp, $vm){
+		//TODO prettify this
 		$newCvmps = [];
-
+		$pm = $cvmp['vmp'][$vm];
 		Cvmp::removeVm($cvmp,$vm);
-		$pms = array_keys($cvmp['pmp']);		
+		$pms = $cvmp['pmp'];
+		unset($pms[$pm]);
+		$pms = array_keys($pms);		
 
 		foreach ($pms as $pm) {
 			if (RulesFreeOfContext::isAllowed($vm,$pm)){
@@ -76,10 +82,10 @@ class OrderCloud {
 		return $newCvmps;
 	}
 
-	public function selectLowerVm(CVMP &$cvmp, &$ignoreVMs){
-		//TODO Test Me
+	public function selectLowerVm( &$cvmp, &$ignoreVMs){
 		$evalBase = Qualifiers::getEvaluation($cvmp);
-		$ignore = array_flip($ignore);
+
+		$ignore = array_flip($ignoreVMs);
 		//TODO Valor max do int pode ser um problema pois vai estourar no 
 		$valueMin = PHP_INT_MAX;
 
@@ -91,23 +97,21 @@ class OrderCloud {
 				$vmMin = $vm;
 			}
 		}
-		if(is_null($vmMin)) throw new Exception("Couldnt find lower VM because the lower value is grater than the biggest INT", 1);
-		
-		return $vm;
+		if(is_null($vmMin)){
+			throw new Exception("Couldnt find lower VM because the lower value is grater than the biggest INT", 1);
+		}
+		return $vmMin;
 		
 	}
 
 	public function isNonDominant( &$baseCvmp , &$candidateCvmp ){
-		//TODO Test Me
 		$evalBase = Qualifiers::getEvaluation($baseCvmp);
 		$evalCand = Qualifiers::getEvaluation($candidateCvmp);
-
+		$count = 0;
 		foreach ($evalBase as $vm => $value) {
-			if($value > $evalCand[$vm])
-				return false;
+			$count += $evalCand[$vm] - $value;
+			if($value > $evalCand[$vm]) return false;
 		}
-		return true;
+		return ($count != 0) ;
 	}
 }
-
-$x = new OrderCloud();

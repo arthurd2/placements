@@ -15,6 +15,6 @@ class HandlerSingletonTest extends PHPUnit_Framework_TestCase
         $handler->add('HandlerSingletonTest');
         $classes = $handler->getClasses();
     	$this->assertEquals(1, count($classes) , "Size of classes differ");
-    	$this->assertEquals('HandlerSingletonTest', $classes[0] , "Name of the class differ");
+    	$this->assertEquals('HandlerSingletonTest', array_pop($classes) , "Name of the class differ");
     }
 }

@@ -10,4 +10,6 @@ class QualifierTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('Qualifier', get_class($qual), "Class Does not match");
         $this->assertEquals(1,$qual->getWeight(),'');
     }
+
 }
+

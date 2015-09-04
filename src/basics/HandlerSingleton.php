@@ -19,7 +19,7 @@ class HandlerSingleton {
         return $called::$instance[$called];
     }
 
-	static function add($class){
+	public static function add($class){
 		$called = get_called_class();
 		$instance = $called::getInstance();
 		$interfaceClass = $instance->interfaceClass;
@@ -27,7 +27,7 @@ class HandlerSingleton {
         
         $implements = class_implements($class);
 		if (class_exists($class) and in_array($interfaceClass, $implements) and is_subclass_of($class, $extendsClass))
-			$instance->classes[] = $class;
+			$instance->classes[$class] = $class;
 		else{
 			throw new Exception("Class '$class' does not: implements '$interfaceClass' or extends '$extendsClass'", 1);
 			return false;
@@ -35,7 +35,13 @@ class HandlerSingleton {
 		return true;
 	}
 
-	static function getClasses(){
+	public static function del($class){
+		$called = get_called_class();
+		$instance = $called::getInstance();
+		unset($instance->classes[$class]);
+	}
+
+	public static function getClasses(){
 		$called = get_called_class();
 		$instance = $called::getInstance();
 		return $instance->classes;
